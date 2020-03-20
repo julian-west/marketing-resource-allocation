@@ -1,0 +1,33 @@
+---
+title: "Marketing Analytics Individual Report"
+author: "Julian West"
+date: "20 March 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(tseries)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+```
+
+# Load Data
+```{r}
+data <- read_excel("./data/dataset_var.xls")
+
+
+data_view <- head(data)
+data_view %>%
+  kable() %>%
+  kable_styling()
+```
+
+
+# Visualise Variables
