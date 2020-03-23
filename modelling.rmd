@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readxl)
 library(tseries)
+library(forecast)
 library(dplyr)
 library(knitr)
 library(kableExtra)
@@ -30,4 +31,19 @@ data_view %>%
 ```
 
 
-# Visualise Variables
+# Visualise Marketing Variables
+
+```{r, echo=FALSE}
+ts.plot(data$Revenues, col="blue", main="Revenues")
+ts.plot(data$Flyer, col="red", main="Flyers")
+ts.plot(data$Catalog, col="red", main="Catalog")
+ts.plot(data$Adwords, col="darkgreen", main="Adwords")
+ts.plot(data$Emailing, col="red", main="Email")
+
+
+```
+
+# Analysis
+
+
+
