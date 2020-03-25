@@ -1,0 +1,50 @@
+---
+title: "SCAN*PRO"
+author: "Julian West"
+date: "25 March 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(dplyr)
+```
+
+```{r}
+data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
+head(data)
+```
+
+```{r}
+main_features <- c("CategorySales",
+              "PRICEBRAND1",
+              "PRICEBRAND2",
+              "PRICEBRAND3",
+              "display_brand1",
+              "display_brand2",
+              "display_brand3",
+              "FEATUREBRAND1",
+              "FEATUREBRAND2",
+              "FEATUREBRAND3")
+              
+add_features <- c("RETAILERMARGINBRAND1",
+                  "RETAILERMARGINBRAND2",
+                  "RETAILERMARGINBRAND3",
+                  "SALESBRAND1",
+                  "SALESBRAND2",
+                  "SALESBRAND3",
+                  "WHOLESALEPRICE1",
+                  "WHOLESALEPRICE2",
+                  "WHOLESALEPRICE3")
+
+store_data <- data %>% select(main_features)
+
+lm(data=store_data, formula = Category Sales ~ .)
+
+```
+
