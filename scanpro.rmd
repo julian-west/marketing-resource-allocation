@@ -2,7 +2,15 @@
 title: "SCAN*PRO"
 author: "Julian West"
 date: "25 March 2020"
-output: html_document
+output: 
+  html_document:
+    theme: cosmo
+    fig_caption: yes
+    number_sections: TRUE
+    toc: TRUE
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
 ---
 
 ```{r setup, include=FALSE}
@@ -10,14 +18,26 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
+```{r, echo=FALSE, warning=FALSE,message=FALSE}
 library(readxl)
 library(dplyr)
 ```
 
-# SCAN * PRO modelling
+# Abstract 
+TODO
 
-## Dataset
+# Introduction
+
+## Objective & Research Question
+
+## About SCAN*PRO
+
+## Software Used
+
+All analysis for this project was conducted using [R (programming language)](https://www.r-project.org/). Details of code and packages used are included in the Appendix.
+
+
+# Dataset
 The data consists of scanner records for beer category products from Dominick's Finer Foods (Dominick's). Dominick's was a Chicago-area grocery store chain before being [acquired by Safeway in 1998](https://en.wikipedia.org/wiki/Dominick%27s) and eventually closing in 2013. The original source of the dataset was [Chicago Booth Kilts Center for Marketing](https://www.chicagobooth.edu/research/kilts/datasets/dominicks), however, the dataset used for analysis was an adapted dataset shared by the Imperial College Retail Marketing analytics teaching team via Slack (beer_data_chicago_Dominicks.xslx).
 
 
@@ -32,12 +52,16 @@ The data covers 227 weeks (4 years 5 months) of sales for three brands of beer b
 
 The combined sales of the three brands is also included in the dataset.
 
+The sales attribute is the weekly sales of each brand in dollars. The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week (Srinivasan et al, 2004). It is not clear from the literature what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. The price is the retail price of the brand in dollars. The wholesale price is the wholesale price of the product in dollars. It is unclear from the literature whether the retailer marigin is in absolute or percentasge terms. The retailer margin should be equal to the difference in sales price and wholesale price, however, this is not the case for the dataset so this attribute will be ignored as it is not important for the implementation of a SCAN*PRO model.
+
+The 
 
 
-
-### Assumptions
+## Assumptions
 The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
 
+
+## Exploratory Analysis 
 
 ```{r}
 data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
@@ -75,3 +99,13 @@ scanpro <- lm(data=store_data, formula = CategorySales ~ .)
 
 ```
 
+# Modelling & Results
+
+# Discussion
+
+# Conclusions
+
+## Reocmmendations to management
+
+
+## Model Improvments
