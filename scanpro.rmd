@@ -15,6 +15,30 @@ library(readxl)
 library(dplyr)
 ```
 
+# SCAN * PRO modelling
+
+## Dataset
+The data consists of scanner records for beer category products from Dominick's Finer Foods (Dominick's). Dominick's was a Chicago-area grocery store chain before being [acquired by Safeway in 1998](https://en.wikipedia.org/wiki/Dominick%27s) and eventually closing in 2013. The original source of the dataset was [Chicago Booth Kilts Center for Marketing](https://www.chicagobooth.edu/research/kilts/datasets/dominicks), however, the dataset used for analysis was an adapted dataset shared by the Imperial College Retail Marketing analytics teaching team via Slack (beer_data_chicago_Dominicks.xslx).
+
+
+The data covers 227 weeks (4 years 5 months) of sales for three brands of beer between 1989 and 1993. The raw data contains the following attributes for each brand:
+
+- Sales
+- Display
+- Feature
+- Price
+- Retailer Margin
+- Wholesale Price
+
+The combined sales of the three brands is also included in the dataset.
+
+
+
+
+### Assumptions
+The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
+
+
 ```{r}
 data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
 head(data)
@@ -44,7 +68,10 @@ add_features <- c("RETAILERMARGINBRAND1",
 
 store_data <- data %>% select(main_features)
 
-lm(data=store_data, formula = Category Sales ~ .)
+#convert to log
+
+
+scanpro <- lm(data=store_data, formula = CategorySales ~ .)
 
 ```
 
