@@ -288,6 +288,15 @@ Week
 CategorySales
 </th>
 <th style="text-align:right;">
+SALESBRAND1
+</th>
+<th style="text-align:right;">
+SALESBRAND2
+</th>
+<th style="text-align:right;">
+SALESBRAND3
+</th>
+<th style="text-align:right;">
 PRICEBRAND1
 </th>
 <th style="text-align:right;">
@@ -325,6 +334,15 @@ FEATUREBRAND3
 62929.48
 </td>
 <td style="text-align:right;">
+24321.60
+</td>
+<td style="text-align:right;">
+27790.16
+</td>
+<td style="text-align:right;">
+10817.720
+</td>
+<td style="text-align:right;">
 5.005623
 </td>
 <td style="text-align:right;">
@@ -358,6 +376,15 @@ FEATUREBRAND3
 </td>
 <td style="text-align:right;">
 70907.53
+</td>
+<td style="text-align:right;">
+33005.98
+</td>
+<td style="text-align:right;">
+26466.92
+</td>
+<td style="text-align:right;">
+11434.624
 </td>
 <td style="text-align:right;">
 4.759082
@@ -395,6 +422,15 @@ FEATUREBRAND3
 67031.20
 </td>
 <td style="text-align:right;">
+34129.98
+</td>
+<td style="text-align:right;">
+26000.58
+</td>
+<td style="text-align:right;">
+6900.645
+</td>
+<td style="text-align:right;">
 4.630858
 </td>
 <td style="text-align:right;">
@@ -428,6 +464,15 @@ FEATUREBRAND3
 </td>
 <td style="text-align:right;">
 83289.67
+</td>
+<td style="text-align:right;">
+41453.75
+</td>
+<td style="text-align:right;">
+35708.43
+</td>
+<td style="text-align:right;">
+6127.485
 </td>
 <td style="text-align:right;">
 4.222040
@@ -465,6 +510,15 @@ FEATUREBRAND3
 122057.55
 </td>
 <td style="text-align:right;">
+67620.02
+</td>
+<td style="text-align:right;">
+46842.79
+</td>
+<td style="text-align:right;">
+7594.739
+</td>
+<td style="text-align:right;">
 4.105199
 </td>
 <td style="text-align:right;">
@@ -498,6 +552,15 @@ FEATUREBRAND3
 </td>
 <td style="text-align:right;">
 79422.44
+</td>
+<td style="text-align:right;">
+41049.03
+</td>
+<td style="text-align:right;">
+28123.13
+</td>
+<td style="text-align:right;">
+10250.272
 </td>
 <td style="text-align:right;">
 4.630080
@@ -545,21 +608,110 @@ FEATUREBRAND3
 </div>
 <div id="results" class="section level2">
 <h2><span class="header-section-number">4.2</span> Results</h2>
-<pre><code>## # A tibble: 227 x 10
-##     Week PRICEBRAND1 PRICEBRAND2 PRICEBRAND3 display_brand1 display_brand2
-##    &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;
-##  1     1        5.01        4.56        4.29          0             0.124 
-##  2     2        4.76        4.67        4.34          0.234         0.075 
-##  3     3        4.63        4.77        4.91          0.256         0.119 
-##  4     4        4.22        4.27        4.93          0.105         0.12  
-##  5     5        4.11        4.10        4.91          0.18          0.092 
-##  6     6        4.63        4.73        4.44          0.141         0.082 
-##  7     7        5.01        4.36        4.92          0             0.115 
-##  8     8        4.48        4.35        4.97          0.108         0.097 
-##  9     9        4.39        4.44        4.85          0.135         0.0710
-## 10    10        4.40        4.44        4.85          0.159         0.029 
-## # … with 217 more rows, and 4 more variables: display_brand3 &lt;dbl&gt;,
-## #   FEATUREBRAND1 &lt;dbl&gt;, FEATUREBRAND2 &lt;dbl&gt;, FEATUREBRAND3 &lt;dbl&gt;</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = SALESBRAND1 ~ ., data = brand1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.56826 -0.19126  0.00918  0.15805  0.65692 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    17.829552   0.857093  20.802  &lt; 2e-16 ***
+## PRICEBRAND1    -2.834389   0.370998  -7.640 6.89e-13 ***
+## PRICEBRAND2    -0.569524   0.219802  -2.591 0.010217 *  
+## PRICEBRAND3    -0.880748   0.354613  -2.484 0.013760 *  
+## display_brand1  0.044853   0.017855   2.512 0.012730 *  
+## display_brand2  0.137168   0.053296   2.574 0.010728 *  
+## display_brand3 -0.013548   0.013043  -1.039 0.300097    
+## FEATUREBRAND1   0.047687   0.013026   3.661 0.000316 ***
+## FEATUREBRAND2  -0.004966   0.017989  -0.276 0.782745    
+## FEATUREBRAND3   0.056685   0.027964   2.027 0.043879 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.237 on 217 degrees of freedom
+## Multiple R-squared:  0.4311, Adjusted R-squared:  0.4075 
+## F-statistic: 18.27 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = SALESBRAND2 ~ ., data = brand2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.62780 -0.12807 -0.01088  0.13672  0.61285 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    15.2860233  0.7294373  20.956  &lt; 2e-16 ***
+## PRICEBRAND1     0.0038415  0.3157418   0.012   0.9903    
+## PRICEBRAND2    -2.6002789  0.1870645 -13.900  &lt; 2e-16 ***
+## PRICEBRAND3    -0.1104433  0.3017969  -0.366   0.7148    
+## display_brand1  0.0071239  0.0151958   0.469   0.6397    
+## display_brand2  0.2820857  0.0453581   6.219 2.54e-09 ***
+## display_brand3 -0.0047509  0.0111004  -0.428   0.6691    
+## FEATUREBRAND1   0.0208528  0.0110856   1.881   0.0613 .  
+## FEATUREBRAND2  -0.0001788  0.0153094  -0.012   0.9907    
+## FEATUREBRAND3   0.0433956  0.0237994   1.823   0.0696 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2017 on 217 degrees of freedom
+## Multiple R-squared:  0.5157, Adjusted R-squared:  0.4956 
+## F-statistic: 25.67 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = SALESBRAND3 ~ ., data = brand3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.4244 -0.1494 -0.0219  0.1428  0.7032 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    14.182242   0.776234  18.271  &lt; 2e-16 ***
+## PRICEBRAND1     0.690791   0.335998   2.056 0.040985 *  
+## PRICEBRAND2     0.144948   0.199066   0.728 0.467313    
+## PRICEBRAND3    -3.702493   0.321159 -11.529  &lt; 2e-16 ***
+## display_brand1  0.017440   0.016171   1.079 0.281997    
+## display_brand2  0.169588   0.048268   3.513 0.000538 ***
+## display_brand3 -0.013511   0.011813  -1.144 0.253956    
+## FEATUREBRAND1   0.028209   0.011797   2.391 0.017645 *  
+## FEATUREBRAND2  -0.002353   0.016292  -0.144 0.885299    
+## FEATUREBRAND3   0.068761   0.025326   2.715 0.007161 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2147 on 217 degrees of freedom
+## Multiple R-squared:  0.5379, Adjusted R-squared:  0.5187 
+## F-statistic: 28.06 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CategorySales ~ ., data = categoryTotal)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.50155 -0.15783 -0.00472  0.16286  0.63673 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    17.480265   0.769208  22.725  &lt; 2e-16 ***
+## PRICEBRAND1    -1.208794   0.332957  -3.630 0.000353 ***
+## PRICEBRAND2    -1.463383   0.197264  -7.418 2.64e-12 ***
+## PRICEBRAND3    -0.891840   0.318251  -2.802 0.005533 ** 
+## display_brand1  0.023648   0.016024   1.476 0.141453    
+## display_brand2  0.201440   0.047831   4.211 3.72e-05 ***
+## display_brand3 -0.009182   0.011706  -0.784 0.433663    
+## FEATUREBRAND1   0.035689   0.011690   3.053 0.002549 ** 
+## FEATUREBRAND2  -0.003112   0.016144  -0.193 0.847341    
+## FEATUREBRAND3   0.051914   0.025097   2.069 0.039774 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2127 on 217 degrees of freedom
+## Multiple R-squared:  0.3503, Adjusted R-squared:  0.3233 
+## F-statistic:    13 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Table of coefficients…. brief explaination. Model validation of test data</p>
 </div>
 </div>

@@ -80,6 +80,9 @@ The data is given at a weekly level and will therefore trace the impact of price
 ```{r}
 main_features <- c("Week",
                   "CategorySales",
+                  "SALESBRAND1",
+                  "SALESBRAND2",
+                  "SALESBRAND3",
                   "PRICEBRAND1",
                   "PRICEBRAND2",
                   "PRICEBRAND3",
@@ -93,9 +96,6 @@ main_features <- c("Week",
 add_features <- c("RETAILERMARGINBRAND1",
                   "RETAILERMARGINBRAND2",
                   "RETAILERMARGINBRAND3",
-                  "SALESBRAND1",
-                  "SALESBRAND2",
-                  "SALESBRAND3",
                   "WHOLESALEPRICE1",
                   "WHOLESALEPRICE2",
                   "WHOLESALEPRICE3")
@@ -175,7 +175,41 @@ test <- store_data[-train_ind, ]
 ## Results
 
 ```{r}
-store_data %>% select(-CategorySales)
+brand1 <- store_data %>% 
+  select(-Week,-CategorySales,-SALESBRAND2,-SALESBRAND3) %>%
+  lapply(function(x){return(log(x+0.001))}) %>%
+  as.data.frame()
+
+brand1.model <- lm(SALESBRAND1 ~ ., data=brand1)
+summary(brand1.model)
+
+
+brand2 <- store_data %>% 
+  select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND3) %>%
+  lapply(function(x){return(log(x+0.001))}) %>%
+  as.data.frame()
+
+brand2.model <- lm(SALESBRAND2 ~ ., data=brand2)
+summary(brand2.model)
+
+
+brand3 <- store_data %>% 
+  select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND2) %>%
+  lapply(function(x){return(log(x+0.001))}) %>%
+  as.data.frame()
+
+brand3.model <- lm(SALESBRAND3 ~ ., data=brand3)
+summary(brand3.model)
+
+
+
+categoryTotal <- store_data %>% 
+  select(-Week,-SALESBRAND1,-SALESBRAND2, -SALESBRAND3) %>%
+  lapply(function(x){return(log(x+0.001))}) %>%
+  as.data.frame()
+
+categoryTotal.model <- lm(CategorySales ~ ., data=categoryTotal)
+summary(categoryTotal.model)
 ```
 
 
