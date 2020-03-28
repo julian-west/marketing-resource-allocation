@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
@@ -24,6 +24,7 @@ library(tidyr)
 library(dplyr)
 library(forecast)
 library(ggplot2)
+library(kableExtra)
 ```
 
 # Abstract 
@@ -65,8 +66,13 @@ The combined sales of the three brands is also included in the dataset.
 
 The sales attribute is the weekly sales of each brand in dollars. The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week (Srinivasan et al, 2004). It is not clear from the literature what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. The price is the retail price of the brand in dollars. The wholesale price is the wholesale price of the product in dollars. It is unclear from the literature whether the retailer marigin is in absolute or percentasge terms. The retailer margin should be equal to the difference in sales price and wholesale price, however, this is not the case for the dataset so this attribute will be ignored as it is not important for the implementation of a SCAN*PRO model.
 
-The ....
+The .... talk about not using retailer marign and wholesale price etc.......
 
+
+There were no missing observations in the dataset.
+
+## Assumptions
+The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
 
 
 ## Exploratory Analysis 
@@ -98,18 +104,21 @@ add_features <- c("RETAILERMARGINBRAND1",
 data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
 
 store_data <- data %>% select(main_features)
-head(store_data)
+kable(head(store_data))
 
 ```
 
 ```{r}
-
-sales <- ts(store_data$CategorySales)
-autoplot(sales)
+stl(ts(store_data$CategorySales,frequency = 52), s.window = 'periodic') %>% 
+  autoplot + 
+  theme_minimal() +
+  ggtitle("Total beer category sales, trend and seasonality") +
+  xlab("Months")
 ```
 
+The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seaonsal component to beer sales.
 
-```{r}
+```{r, echo=FALSE}
 plot_variable_by_brand <- function(data, variable, title, ylabel){
   #plots specified variable by brand
   
@@ -137,30 +146,40 @@ plot_variable_by_brand(data,"display_brand","Weekly displayed products by brand"
 
 ```
 
-## Assumptions
-The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week. It is also assumed that sales of beer is not seasonal.
+The sales chart shows that brands 1 and 2 have similar sales levels while brand 3 has much lower sales. The prices for each brand are similar and fluctuate between appoximately \$4.0 and \$5.25. However, brand number 3 greatly reduced its retail price to below \$3.5 in a couple of the weeks recorded in the dataset. Brand 1 had the most number of weeks with featured products and generally had a greater number of SKUs featured each week. Brand 2 had a low by consistent level of featured products, however, brand 3 did not have any featured products until late in the time period where there were a significant spike in the percentage of SKUs featured. The percentage of SKUs displayed for each brand fluctuated greatly between 0% and 40% for brand 1 and 3, whereas brand 2 had a more consistent level of display SKUs at approximately 15% each week. 
 
 
 # Modelling & Results
 ## Methodology
-Explain log transformations etc. and model validation...
+The SCAN*PRO model can be estimated using nonlinear estimation methods in its multiplicative form. However, the model parameters can be more easily estimated by taking a log transformation and using linear estimation methods. Linear estimation methods are preferred as linear models give a consistent set of model parameters whereas the parameters of nonlinear methods can be very sensitive to the optimization starting value, learning rate etc. and may not converage to the global minimum. The log transformed model can be specified as:
+
+**MODEL EQUATION**
+
+To validate the model, 75% of the data was randomly sampled for use in model parameter estimation with 25% left for model validation.
+
+
 
 ```{r}
-SPLIT = 0.8
-train_inds <- floor(nrow(store_data)*0.8)
-train_data <- store_data[1:train_inds,]
-test_data <- store_data[(1+train_inds):nrow(store_data),]
+set.seed(42)
+
+SPLIT = 0.75
+smp_size <- floor(nrow(store_data)*SPLIT)
+
+train_ind <- sample(seq_len(nrow(store_data)), size = smp_size)
+
+train <- store_data[train_ind, ]
+test <- store_data[-train_ind, ]
 ```
-
-
-```{r}
-stl(ts(store_data$CategorySales,frequency = 12), s.window = 'periodic') %>% autoplot
-```
-
-
 
 
 ## Results
+
+```{r}
+store_data %>% select(-CategorySales)
+```
+
+
+
 Table of coefficients.... brief explaination. Model validation of test data
 
 # Discussion
