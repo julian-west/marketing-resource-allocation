@@ -20,7 +20,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
 library(readxl)
+library(tidyr)
 library(dplyr)
+library(forecast)
+library(ggplot2)
 ```
 
 # Abstract 
@@ -28,9 +31,17 @@ TODO
 
 # Introduction
 
+Retailers are interested in the financial impact of ... price action, 
+
 ## Objective & Research Question
 
+- What is the effect of feature and display advertising on beer sales?
+- What is the effect of price on sales
+
+
 ## About SCAN*PRO
+
+SCAN*PRO is a store-level model which quantifies the effect of price changes and promotional activities on the sales of products for retailers. 
 
 ## Software Used
 
@@ -54,31 +65,24 @@ The combined sales of the three brands is also included in the dataset.
 
 The sales attribute is the weekly sales of each brand in dollars. The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week (Srinivasan et al, 2004). It is not clear from the literature what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. The price is the retail price of the brand in dollars. The wholesale price is the wholesale price of the product in dollars. It is unclear from the literature whether the retailer marigin is in absolute or percentasge terms. The retailer margin should be equal to the difference in sales price and wholesale price, however, this is not the case for the dataset so this attribute will be ignored as it is not important for the implementation of a SCAN*PRO model.
 
-The 
+The ....
 
-
-## Assumptions
-The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
 
 
 ## Exploratory Analysis 
 
 ```{r}
-data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
-head(data)
-```
-
-```{r}
-main_features <- c("CategorySales",
-              "PRICEBRAND1",
-              "PRICEBRAND2",
-              "PRICEBRAND3",
-              "display_brand1",
-              "display_brand2",
-              "display_brand3",
-              "FEATUREBRAND1",
-              "FEATUREBRAND2",
-              "FEATUREBRAND3")
+main_features <- c("Week",
+                  "CategorySales",
+                  "PRICEBRAND1",
+                  "PRICEBRAND2",
+                  "PRICEBRAND3",
+                  "display_brand1",
+                  "display_brand2",
+                  "display_brand3",
+                  "FEATUREBRAND1",
+                  "FEATUREBRAND2",
+                  "FEATUREBRAND3")
               
 add_features <- c("RETAILERMARGINBRAND1",
                   "RETAILERMARGINBRAND2",
@@ -90,22 +94,85 @@ add_features <- c("RETAILERMARGINBRAND1",
                   "WHOLESALEPRICE2",
                   "WHOLESALEPRICE3")
 
+
+data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
+
 store_data <- data %>% select(main_features)
-
-#convert to log
-
-
-scanpro <- lm(data=store_data, formula = CategorySales ~ .)
+head(store_data)
 
 ```
 
+```{r}
+
+sales <- ts(store_data$CategorySales)
+autoplot(sales)
+```
+
+
+```{r}
+plot_variable_by_brand <- function(data, variable, title, ylabel){
+  #plots specified variable by brand
+  
+  #select cols and reshape dataframe
+  df_data <- data %>%
+    select(Week, paste0(variable,"1"), paste0(variable,"2"), paste0(variable,"3")) %>%
+    gather(key="variable",value="value", -Week)
+
+
+  return (ggplot(df_data, aes(x=Week, y=value)) +
+    geom_line(aes(color=variable), size=1) +
+    scale_color_manual(values = c("#00AFBB", "#E7B800", "#ff0000")) +
+    theme_minimal() +
+    ggtitle(title) +
+    ylab(ylabel))
+}
+```
+
+
+```{r, echo=FALSE}
+plot_variable_by_brand(data,"SALESBRAND","Weekly Sales by Brand","Sales ($)")
+plot_variable_by_brand(data,"PRICEBRAND","Weekly Prices by Brand","Prices ($)")
+plot_variable_by_brand(data,"FEATUREBRAND","Weekly featured products by brand", "Percentage of SKUs")
+plot_variable_by_brand(data,"display_brand","Weekly displayed products by brand","Percentage of SKUs")
+
+```
+
+## Assumptions
+The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week. It is also assumed that sales of beer is not seasonal.
+
+
 # Modelling & Results
+## Methodology
+Explain log transformations etc. and model validation...
+
+```{r}
+SPLIT = 0.8
+train_inds <- floor(nrow(store_data)*0.8)
+train_data <- store_data[1:train_inds,]
+test_data <- store_data[(1+train_inds):nrow(store_data),]
+```
+
+
+```{r}
+stl(ts(store_data$CategorySales,frequency = 12), s.window = 'periodic') %>% autoplot
+```
+
+
+
+
+## Results
+Table of coefficients.... brief explaination. Model validation of test data
 
 # Discussion
+Interpretation of model coefficients.....
 
 # Conclusions
 
 ## Reocmmendations to management
-
+How should management act on the results of the model. What could be the uplift in sales?
 
 ## Model Improvments
+What are the main assumptions of the model. What factors are missing from the dataset? What other techniques have been used?
+
+
+# References
