@@ -24,7 +24,7 @@ library(tidyr)
 library(dplyr)
 library(forecast)
 library(ggplot2)
-library(kableExtra)
+library(stargazer)
 ```
 
 # Abstract 
@@ -32,17 +32,22 @@ TODO
 
 # Introduction
 
-Retailers are interested in the financial impact of ... price action, 
+Retailers are interested in understanding the financial impact of promotional activity on product sales. The SCAN\*PRO model is a popular method for quantifying the interaction effects between various promotions and allows retail store managers to improve their promotional mix decisions. In this project, the SCAN\*PRO model will be used to understand the effects of promotional activity on the sales of three brands of beer for the Chicago based supermarket chain Dominick's. The insights gained from the model will be used to make recommendations to the store manager on how to improve total beer sales with an optimized promotional mix.
 
-## Objective & Research Question
+## Business Objective & Research Question
 
-- What is the effect of feature and display advertising on beer sales?
-- What is the effect of price on sales
+- How does feature and display promotional activity of each beer brand affect total store sales of beer? 
+
+This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions and that there are no specific contractural obilgations with the brand supplier to promote the brand. The output of the SCAN*PRO model will direct the manager as to which brands should be promoted more frequently.
 
 
 ## About SCAN*PRO
 
 SCAN*PRO is a store-level model which quantifies the effect of price changes and promotional activities on the sales of products for retailers. 
+
+The model decomposes sales into: own and cross brand effects of price changes; display advertising and feature advertising; week/seasonal effects, store effects and random components.
+
+.......
 
 ## Software Used
 
@@ -64,9 +69,9 @@ The data covers 227 weeks (4 years 5 months) of sales for three brands of beer b
 
 The combined sales of the three brands is also included in the dataset.
 
-The sales attribute is the weekly sales of each brand in dollars. The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week (Srinivasan et al, 2004). It is not clear from the literature what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. The price is the retail price of the brand in dollars. The wholesale price is the wholesale price of the product in dollars. It is unclear from the literature whether the retailer marigin is in absolute or percentasge terms. The retailer margin should be equal to the difference in sales price and wholesale price, however, this is not the case for the dataset so this attribute will be ignored as it is not important for the implementation of a SCAN*PRO model.
+The sales attribute is the weekly sales of each brand in dollars. The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week (Srinivasan et al, 2004). It is not clear from the literature what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. The price is the retail price of the brand in dollars. The wholesale price is the wholesale price of the product in dollars. It is unclear from the literature whether the retailer margin is in absolute or percentage terms. The retailer margin should be equal to the difference in sales price and wholesale price, however, this is not the case for the dataset so this attribute will be ignored as it is not important for the implementation of a SCAN*PRO model.
 
-The .... talk about not using retailer marign and wholesale price etc.......
+The .... talk about not using retailer margin and wholesale price etc.......
 
 
 There were no missing observations in the dataset.
@@ -77,7 +82,7 @@ The data is given at a weekly level and will therefore trace the impact of price
 
 ## Exploratory Analysis 
 
-```{r}
+```{r, results='asis'}
 main_features <- c("Week",
                   "CategorySales",
                   "SALESBRAND1",
@@ -104,7 +109,7 @@ add_features <- c("RETAILERMARGINBRAND1",
 data <- read_excel("./data/beer_data_chicago_Dominicks.xlsx")
 
 store_data <- data %>% select(main_features)
-kable(head(store_data))
+stargazer(head(store_data),summary=FALSE, type='html',rownames=FALSE)
 
 ```
 
@@ -116,7 +121,7 @@ stl(ts(store_data$CategorySales,frequency = 52), s.window = 'periodic') %>%
   xlab("Months")
 ```
 
-The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seaonsal component to beer sales.
+The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seasonal component to beer sales.
 
 ```{r, echo=FALSE}
 plot_variable_by_brand <- function(data, variable, title, ylabel){
@@ -146,12 +151,12 @@ plot_variable_by_brand(data,"display_brand","Weekly displayed products by brand"
 
 ```
 
-The sales chart shows that brands 1 and 2 have similar sales levels while brand 3 has much lower sales. The prices for each brand are similar and fluctuate between appoximately \$4.0 and \$5.25. However, brand number 3 greatly reduced its retail price to below \$3.5 in a couple of the weeks recorded in the dataset. Brand 1 had the most number of weeks with featured products and generally had a greater number of SKUs featured each week. Brand 2 had a low by consistent level of featured products, however, brand 3 did not have any featured products until late in the time period where there were a significant spike in the percentage of SKUs featured. The percentage of SKUs displayed for each brand fluctuated greatly between 0% and 40% for brand 1 and 3, whereas brand 2 had a more consistent level of display SKUs at approximately 15% each week. 
+The sales chart shows that brands 1 and 2 have similar sales levels while brand 3 has much lower sales. The prices for each brand are similar and fluctuate between approximately \$4.0 and \$5.25. However, brand number 3 greatly reduced its retail price to below \$3.5 in a couple of the weeks recorded in the dataset. Brand 1 had the most number of weeks with featured products and generally had a greater number of SKUs featured each week. Brand 2 had a low by consistent level of featured products, however, brand 3 did not have any featured products until late in the time period where there were a significant spike in the percentage of SKUs featured. The percentage of SKUs displayed for each brand fluctuated greatly between 0% and 40% for brand 1 and 3, whereas brand 2 had a more consistent level of display SKUs at approximately 15% each week. 
 
 
 # Modelling & Results
 ## Methodology
-The SCAN*PRO model can be estimated using nonlinear estimation methods in its multiplicative form. However, the model parameters can be more easily estimated by taking a log transformation and using linear estimation methods. Linear estimation methods are preferred as linear models give a consistent set of model parameters whereas the parameters of nonlinear methods can be very sensitive to the optimization starting value, learning rate etc. and may not converage to the global minimum. The log transformed model can be specified as:
+The SCAN*PRO model can be estimated using nonlinear estimation methods in its multiplicative form. However, the model parameters can be more easily estimated by taking a log transformation and using linear estimation methods. Linear estimation methods are preferred as linear models give a consistent set of model parameters whereas the parameters of nonlinear methods can be very sensitive to the optimization starting value, learning rate etc. and may not converge to the global minimum. The log transformed model can be specified as:
 
 **MODEL EQUATION**
 
@@ -175,9 +180,12 @@ test <- store_data[-train_ind, ]
 ## Results
 
 ```{r}
+
+log_transform <- function(x){return(log(x+1))}
+
 brand1 <- store_data %>% 
   select(-Week,-CategorySales,-SALESBRAND2,-SALESBRAND3) %>%
-  lapply(function(x){return(log(x+0.001))}) %>%
+  lapply(log_transform) %>%
   as.data.frame()
 
 brand1.model <- lm(SALESBRAND1 ~ ., data=brand1)
@@ -186,7 +194,7 @@ summary(brand1.model)
 
 brand2 <- store_data %>% 
   select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND3) %>%
-  lapply(function(x){return(log(x+0.001))}) %>%
+  lapply(log_transform) %>%
   as.data.frame()
 
 brand2.model <- lm(SALESBRAND2 ~ ., data=brand2)
@@ -195,7 +203,7 @@ summary(brand2.model)
 
 brand3 <- store_data %>% 
   select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND2) %>%
-  lapply(function(x){return(log(x+0.001))}) %>%
+  lapply(log_transform) %>%
   as.data.frame()
 
 brand3.model <- lm(SALESBRAND3 ~ ., data=brand3)
@@ -214,17 +222,17 @@ summary(categoryTotal.model)
 
 
 
-Table of coefficients.... brief explaination. Model validation of test data
+Table of coefficients.... brief explanation. Model validation of test data
 
 # Discussion
 Interpretation of model coefficients.....
 
 # Conclusions
 
-## Reocmmendations to management
+## Recommendations to management
 How should management act on the results of the model. What could be the uplift in sales?
 
-## Model Improvments
+## Model Improvements
 What are the main assumptions of the model. What factors are missing from the dataset? What other techniques have been used?
 
 
