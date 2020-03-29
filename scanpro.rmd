@@ -25,6 +25,7 @@ library(dplyr)
 library(forecast)
 library(ggplot2)
 library(stargazer)
+library(fastDummies)
 ```
 
 # Abstract 
@@ -36,9 +37,9 @@ Retailers are interested in understanding the financial impact of promotional ac
 
 ## Business Objective & Research Question
 
-- How does feature and display promotional activity of each beer brand affect total store sales of beer? 
+- How does feature and display promotional activity of each beer brand affect the sales of each beer brand? 
 
-This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions and that there are no specific contractural obilgations with the brand supplier to promote the brand. The output of the SCAN*PRO model will direct the manager as to which brands should be promoted more frequently.
+This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions and that there are no specific contractural obilgations with the brand supplier to promote the brand. The output of the SCAN*PRO model will direct the manager as to which form of promotion works best for each brand and how this may translate into increasing sales.
 
 
 ## About SCAN*PRO
@@ -121,6 +122,7 @@ stl(ts(store_data$CategorySales,frequency = 52), s.window = 'periodic') %>%
   xlab("Months")
 ```
 
+
 The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seasonal component to beer sales.
 
 ```{r, echo=FALSE}
@@ -160,8 +162,19 @@ The SCAN*PRO model can be estimated using nonlinear estimation methods in its mu
 
 **MODEL EQUATION**
 
-To validate the model, 75% of the data was randomly sampled for use in model parameter estimation with 25% left for model validation.
 
+Three models were estimated, one for the sales of each brand.
+
+### Data Preprocessing
+As highlighted in the exploratory data analysis, the beer category sales are highly seasonal, therefore, in order to incorporate this seasonality component into the model 12 dummy variables were created for each month of the year. The price of each brand was log transofrmed without any preprocessing. The 'display' variable for each brand was transformed using a log(x+1) transformation. A log(x+1) transformation was used due to the small number of 0 values in the dataset. The 'featured' variables, however, contained mostly zero values and therefore could not be log transformed using a log(x+1) transformation (Wooldridge p 173). The 'featured' variable was transformed into a binary variable with a value of 1 if greater than 1% percentage of SKUs were featured and 0 otherwise.
+
+- log transform price
+- seaonsal dummay variables
+- binary featured
+
+
+### Model Validation
+To validate the model, 75% of the data (170 observations) was randomly sampled for use in model parameter estimation with 25% left for model validation (57 observations) as consistent with the literature (Andrews, 2008). 
 
 
 ```{r}
@@ -177,47 +190,67 @@ test <- store_data[-train_ind, ]
 ```
 
 
+```{r}
+store_data$Month <- format(seq(as.Date('1989/09/01'),by='week',length.out = nrow(store_data)),"%B")
+store_data <- fastDummies::dummy_cols(store_data)
+```
+
+```{r}
+bran1_df <- store_data %>%
+  select(-CategorySales,-SALESBRAND2,-SALESBRAND3)
+```
+
+------ TODO: Make the binary variables for featured --------
+
+```{r}
+make_binary <- function(x){return(if(x>=0.01) 1 else 0)}
+
+store_data$FEATUREBRAND1 %>% lapply(make_binary)
+```
+
+
+
 ## Results
 
 ```{r}
 
-log_transform <- function(x){return(log(x+1))}
-
-brand1 <- store_data %>% 
-  select(-Week,-CategorySales,-SALESBRAND2,-SALESBRAND3) %>%
-  lapply(log_transform) %>%
-  as.data.frame()
-
-brand1.model <- lm(SALESBRAND1 ~ ., data=brand1)
-summary(brand1.model)
-
-
-brand2 <- store_data %>% 
-  select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND3) %>%
-  lapply(log_transform) %>%
-  as.data.frame()
-
-brand2.model <- lm(SALESBRAND2 ~ ., data=brand2)
-summary(brand2.model)
-
-
-brand3 <- store_data %>% 
-  select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND2) %>%
-  lapply(log_transform) %>%
-  as.data.frame()
-
-brand3.model <- lm(SALESBRAND3 ~ ., data=brand3)
-summary(brand3.model)
-
-
-
-categoryTotal <- store_data %>% 
-  select(-Week,-SALESBRAND1,-SALESBRAND2, -SALESBRAND3) %>%
-  lapply(function(x){return(log(x+0.001))}) %>%
-  as.data.frame()
-
-categoryTotal.model <- lm(CategorySales ~ ., data=categoryTotal)
-summary(categoryTotal.model)
+# log_transform <- function(x){return(log(x+1))}
+# 
+# brand1 <- store_data %>% 
+#   select(-Week,-CategorySales,-SALESBRAND2,-SALESBRAND3) %>%
+#   lapply(log_transform) %>%
+#   as.data.frame()
+# 
+# brand1.model <- lm(SALESBRAND1 ~ ., data=brand1)
+# summary(brand1.model)
+# 
+# 
+# brand2 <- store_data %>% 
+#   select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND3) %>%
+#   lapply(log_transform) %>%
+#   as.data.frame()
+# 
+# brand2.model <- lm(SALESBRAND2 ~ ., data=brand2)
+# summary(brand2.model)
+# 
+# 
+# brand3 <- store_data %>% 
+#   select(-Week,-CategorySales,-SALESBRAND1,-SALESBRAND2) %>%
+#   lapply(log_transform) %>%
+#   as.data.frame()
+# 
+# brand3.model <- lm(SALESBRAND3 ~ ., data=brand3)
+# summary(brand3.model)
+# 
+# 
+# 
+# categoryTotal <- store_data %>% 
+#   select(-Week,-SALESBRAND1,-SALESBRAND2, -SALESBRAND3) %>%
+#   lapply(function(x){return(log(x+0.001))}) %>%
+#   as.data.frame()
+# 
+# categoryTotal.model <- lm(CategorySales ~ ., data=categoryTotal)
+# summary(categoryTotal.model)
 ```
 
 

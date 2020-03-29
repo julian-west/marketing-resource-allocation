@@ -243,9 +243,9 @@ div.tocify {
 <div id="business-objective-research-question" class="section level2">
 <h2><span class="header-section-number">2.1</span> Business Objective &amp; Research Question</h2>
 <ul>
-<li>How does feature and display promotional activity of each beer brand affect total store sales of beer?</li>
+<li>How does feature and display promotional activity of each beer brand affect the sales of each beer brand?</li>
 </ul>
-<p>This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions and that there are no specific contractural obilgations with the brand supplier to promote the brand. The output of the SCAN*PRO model will direct the manager as to which brands should be promoted more frequently.</p>
+<p>This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions and that there are no specific contractural obilgations with the brand supplier to promote the brand. The output of the SCAN*PRO model will direct the manager as to which form of promotion works best for each brand and how this may translate into increasing sales.</p>
 </div>
 <div id="about-scanpro" class="section level2">
 <h2><span class="header-section-number">2.2</span> About SCAN*PRO</h2>
@@ -614,114 +614,704 @@ FEATUREBRAND3
 <h2><span class="header-section-number">4.1</span> Methodology</h2>
 <p>The SCAN*PRO model can be estimated using nonlinear estimation methods in its multiplicative form. However, the model parameters can be more easily estimated by taking a log transformation and using linear estimation methods. Linear estimation methods are preferred as linear models give a consistent set of model parameters whereas the parameters of nonlinear methods can be very sensitive to the optimization starting value, learning rate etc. and may not converge to the global minimum. The log transformed model can be specified as:</p>
 <p><strong>MODEL EQUATION</strong></p>
-<p>To validate the model, 75% of the data was randomly sampled for use in model parameter estimation with 25% left for model validation.</p>
+<p>Three models were estimated, one for the sales of each brand.</p>
+<div id="data-preprocessing" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Data Preprocessing</h3>
+<p>As highlighted in the exploratory data analysis, the beer category sales are highly seasonal, therefore, in order to incorporate this seasonality component into the model 12 dummy variables were created for each month of the year. The price of each brand was log transofrmed without any preprocessing. The ‘display’ variable for each brand was transformed using a log(x+1) transformation. A log(x+1) transformation was used due to the small number of 0 values in the dataset. The ‘featured’ variables, however, contained mostly zero values and therefore could not be log transformed using a log(x+1) transformation (Wooldridge p 173). The ‘featured’ variable was transformed into a binary variable with a value of 1 if greater than 1% percentage of SKUs were featured and 0 otherwise.</p>
+<ul>
+<li>log transform price</li>
+<li>seaonsal dummay variables</li>
+<li>binary featured</li>
+</ul>
+</div>
+<div id="model-validation" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Model Validation</h3>
+<p>To validate the model, 75% of the data (170 observations) was randomly sampled for use in model parameter estimation with 25% left for model validation (57 observations) as consistent with the literature (Andrews, 2008).</p>
+<p>—— TODO: Make the binary variables for featured ——–</p>
+<pre><code>## [[1]]
+## [1] 0
+## 
+## [[2]]
+## [1] 0
+## 
+## [[3]]
+## [1] 0
+## 
+## [[4]]
+## [1] 0
+## 
+## [[5]]
+## [1] 0
+## 
+## [[6]]
+## [1] 0
+## 
+## [[7]]
+## [1] 0
+## 
+## [[8]]
+## [1] 0
+## 
+## [[9]]
+## [1] 0
+## 
+## [[10]]
+## [1] 0
+## 
+## [[11]]
+## [1] 0
+## 
+## [[12]]
+## [1] 0
+## 
+## [[13]]
+## [1] 0
+## 
+## [[14]]
+## [1] 0
+## 
+## [[15]]
+## [1] 0
+## 
+## [[16]]
+## [1] 0
+## 
+## [[17]]
+## [1] 0
+## 
+## [[18]]
+## [1] 0
+## 
+## [[19]]
+## [1] 0
+## 
+## [[20]]
+## [1] 0
+## 
+## [[21]]
+## [1] 0
+## 
+## [[22]]
+## [1] 1
+## 
+## [[23]]
+## [1] 0
+## 
+## [[24]]
+## [1] 0
+## 
+## [[25]]
+## [1] 0
+## 
+## [[26]]
+## [1] 0
+## 
+## [[27]]
+## [1] 0
+## 
+## [[28]]
+## [1] 0
+## 
+## [[29]]
+## [1] 0
+## 
+## [[30]]
+## [1] 0
+## 
+## [[31]]
+## [1] 0
+## 
+## [[32]]
+## [1] 0
+## 
+## [[33]]
+## [1] 0
+## 
+## [[34]]
+## [1] 0
+## 
+## [[35]]
+## [1] 0
+## 
+## [[36]]
+## [1] 0
+## 
+## [[37]]
+## [1] 0
+## 
+## [[38]]
+## [1] 0
+## 
+## [[39]]
+## [1] 0
+## 
+## [[40]]
+## [1] 0
+## 
+## [[41]]
+## [1] 0
+## 
+## [[42]]
+## [1] 0
+## 
+## [[43]]
+## [1] 0
+## 
+## [[44]]
+## [1] 0
+## 
+## [[45]]
+## [1] 0
+## 
+## [[46]]
+## [1] 0
+## 
+## [[47]]
+## [1] 0
+## 
+## [[48]]
+## [1] 0
+## 
+## [[49]]
+## [1] 0
+## 
+## [[50]]
+## [1] 0
+## 
+## [[51]]
+## [1] 0
+## 
+## [[52]]
+## [1] 0
+## 
+## [[53]]
+## [1] 0
+## 
+## [[54]]
+## [1] 0
+## 
+## [[55]]
+## [1] 0
+## 
+## [[56]]
+## [1] 0
+## 
+## [[57]]
+## [1] 1
+## 
+## [[58]]
+## [1] 1
+## 
+## [[59]]
+## [1] 0
+## 
+## [[60]]
+## [1] 1
+## 
+## [[61]]
+## [1] 1
+## 
+## [[62]]
+## [1] 0
+## 
+## [[63]]
+## [1] 0
+## 
+## [[64]]
+## [1] 0
+## 
+## [[65]]
+## [1] 0
+## 
+## [[66]]
+## [1] 1
+## 
+## [[67]]
+## [1] 0
+## 
+## [[68]]
+## [1] 0
+## 
+## [[69]]
+## [1] 0
+## 
+## [[70]]
+## [1] 0
+## 
+## [[71]]
+## [1] 0
+## 
+## [[72]]
+## [1] 0
+## 
+## [[73]]
+## [1] 0
+## 
+## [[74]]
+## [1] 0
+## 
+## [[75]]
+## [1] 0
+## 
+## [[76]]
+## [1] 0
+## 
+## [[77]]
+## [1] 0
+## 
+## [[78]]
+## [1] 0
+## 
+## [[79]]
+## [1] 0
+## 
+## [[80]]
+## [1] 0
+## 
+## [[81]]
+## [1] 0
+## 
+## [[82]]
+## [1] 0
+## 
+## [[83]]
+## [1] 0
+## 
+## [[84]]
+## [1] 0
+## 
+## [[85]]
+## [1] 0
+## 
+## [[86]]
+## [1] 0
+## 
+## [[87]]
+## [1] 0
+## 
+## [[88]]
+## [1] 0
+## 
+## [[89]]
+## [1] 0
+## 
+## [[90]]
+## [1] 0
+## 
+## [[91]]
+## [1] 1
+## 
+## [[92]]
+## [1] 0
+## 
+## [[93]]
+## [1] 0
+## 
+## [[94]]
+## [1] 0
+## 
+## [[95]]
+## [1] 0
+## 
+## [[96]]
+## [1] 0
+## 
+## [[97]]
+## [1] 0
+## 
+## [[98]]
+## [1] 0
+## 
+## [[99]]
+## [1] 0
+## 
+## [[100]]
+## [1] 0
+## 
+## [[101]]
+## [1] 0
+## 
+## [[102]]
+## [1] 0
+## 
+## [[103]]
+## [1] 0
+## 
+## [[104]]
+## [1] 0
+## 
+## [[105]]
+## [1] 0
+## 
+## [[106]]
+## [1] 0
+## 
+## [[107]]
+## [1] 0
+## 
+## [[108]]
+## [1] 0
+## 
+## [[109]]
+## [1] 0
+## 
+## [[110]]
+## [1] 1
+## 
+## [[111]]
+## [1] 0
+## 
+## [[112]]
+## [1] 0
+## 
+## [[113]]
+## [1] 0
+## 
+## [[114]]
+## [1] 0
+## 
+## [[115]]
+## [1] 0
+## 
+## [[116]]
+## [1] 0
+## 
+## [[117]]
+## [1] 0
+## 
+## [[118]]
+## [1] 0
+## 
+## [[119]]
+## [1] 0
+## 
+## [[120]]
+## [1] 0
+## 
+## [[121]]
+## [1] 0
+## 
+## [[122]]
+## [1] 0
+## 
+## [[123]]
+## [1] 0
+## 
+## [[124]]
+## [1] 0
+## 
+## [[125]]
+## [1] 0
+## 
+## [[126]]
+## [1] 1
+## 
+## [[127]]
+## [1] 1
+## 
+## [[128]]
+## [1] 1
+## 
+## [[129]]
+## [1] 1
+## 
+## [[130]]
+## [1] 1
+## 
+## [[131]]
+## [1] 1
+## 
+## [[132]]
+## [1] 0
+## 
+## [[133]]
+## [1] 0
+## 
+## [[134]]
+## [1] 0
+## 
+## [[135]]
+## [1] 0
+## 
+## [[136]]
+## [1] 0
+## 
+## [[137]]
+## [1] 0
+## 
+## [[138]]
+## [1] 0
+## 
+## [[139]]
+## [1] 0
+## 
+## [[140]]
+## [1] 0
+## 
+## [[141]]
+## [1] 0
+## 
+## [[142]]
+## [1] 0
+## 
+## [[143]]
+## [1] 0
+## 
+## [[144]]
+## [1] 0
+## 
+## [[145]]
+## [1] 0
+## 
+## [[146]]
+## [1] 0
+## 
+## [[147]]
+## [1] 0
+## 
+## [[148]]
+## [1] 0
+## 
+## [[149]]
+## [1] 0
+## 
+## [[150]]
+## [1] 0
+## 
+## [[151]]
+## [1] 0
+## 
+## [[152]]
+## [1] 0
+## 
+## [[153]]
+## [1] 0
+## 
+## [[154]]
+## [1] 0
+## 
+## [[155]]
+## [1] 0
+## 
+## [[156]]
+## [1] 1
+## 
+## [[157]]
+## [1] 0
+## 
+## [[158]]
+## [1] 0
+## 
+## [[159]]
+## [1] 1
+## 
+## [[160]]
+## [1] 0
+## 
+## [[161]]
+## [1] 1
+## 
+## [[162]]
+## [1] 0
+## 
+## [[163]]
+## [1] 0
+## 
+## [[164]]
+## [1] 0
+## 
+## [[165]]
+## [1] 0
+## 
+## [[166]]
+## [1] 0
+## 
+## [[167]]
+## [1] 0
+## 
+## [[168]]
+## [1] 0
+## 
+## [[169]]
+## [1] 0
+## 
+## [[170]]
+## [1] 1
+## 
+## [[171]]
+## [1] 0
+## 
+## [[172]]
+## [1] 0
+## 
+## [[173]]
+## [1] 0
+## 
+## [[174]]
+## [1] 0
+## 
+## [[175]]
+## [1] 0
+## 
+## [[176]]
+## [1] 0
+## 
+## [[177]]
+## [1] 0
+## 
+## [[178]]
+## [1] 0
+## 
+## [[179]]
+## [1] 0
+## 
+## [[180]]
+## [1] 0
+## 
+## [[181]]
+## [1] 1
+## 
+## [[182]]
+## [1] 1
+## 
+## [[183]]
+## [1] 1
+## 
+## [[184]]
+## [1] 0
+## 
+## [[185]]
+## [1] 0
+## 
+## [[186]]
+## [1] 1
+## 
+## [[187]]
+## [1] 0
+## 
+## [[188]]
+## [1] 0
+## 
+## [[189]]
+## [1] 0
+## 
+## [[190]]
+## [1] 1
+## 
+## [[191]]
+## [1] 1
+## 
+## [[192]]
+## [1] 0
+## 
+## [[193]]
+## [1] 0
+## 
+## [[194]]
+## [1] 0
+## 
+## [[195]]
+## [1] 0
+## 
+## [[196]]
+## [1] 0
+## 
+## [[197]]
+## [1] 0
+## 
+## [[198]]
+## [1] 0
+## 
+## [[199]]
+## [1] 0
+## 
+## [[200]]
+## [1] 0
+## 
+## [[201]]
+## [1] 0
+## 
+## [[202]]
+## [1] 1
+## 
+## [[203]]
+## [1] 0
+## 
+## [[204]]
+## [1] 0
+## 
+## [[205]]
+## [1] 0
+## 
+## [[206]]
+## [1] 0
+## 
+## [[207]]
+## [1] 0
+## 
+## [[208]]
+## [1] 1
+## 
+## [[209]]
+## [1] 1
+## 
+## [[210]]
+## [1] 0
+## 
+## [[211]]
+## [1] 0
+## 
+## [[212]]
+## [1] 0
+## 
+## [[213]]
+## [1] 0
+## 
+## [[214]]
+## [1] 0
+## 
+## [[215]]
+## [1] 0
+## 
+## [[216]]
+## [1] 0
+## 
+## [[217]]
+## [1] 0
+## 
+## [[218]]
+## [1] 0
+## 
+## [[219]]
+## [1] 0
+## 
+## [[220]]
+## [1] 0
+## 
+## [[221]]
+## [1] 0
+## 
+## [[222]]
+## [1] 0
+## 
+## [[223]]
+## [1] 0
+## 
+## [[224]]
+## [1] 0
+## 
+## [[225]]
+## [1] 0
+## 
+## [[226]]
+## [1] 0
+## 
+## [[227]]
+## [1] 0</code></pre>
+</div>
 </div>
 <div id="results" class="section level2">
 <h2><span class="header-section-number">4.2</span> Results</h2>
-<pre><code>## 
-## Call:
-## lm(formula = SALESBRAND1 ~ ., data = brand1)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.51035 -0.17956 -0.00387  0.16052  0.66190 
-## 
-## Coefficients:
-##                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)     18.8677     1.2295  15.345  &lt; 2e-16 ***
-## PRICEBRAND1     -3.1071     0.4872  -6.377 1.07e-09 ***
-## PRICEBRAND2     -0.5465     0.2695  -2.028  0.04381 *  
-## PRICEBRAND3     -1.4812     0.4669  -3.173  0.00173 ** 
-## display_brand1   0.8320     0.2732   3.046  0.00261 ** 
-## display_brand2   1.5790     0.5549   2.845  0.00486 ** 
-## display_brand3  -0.5285     0.2800  -1.888  0.06042 .  
-## FEATUREBRAND1    2.4313     0.8170   2.976  0.00325 ** 
-## FEATUREBRAND2    0.3840     3.3916   0.113  0.90996    
-## FEATUREBRAND3    1.3906     1.7578   0.791  0.42973    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.2397 on 217 degrees of freedom
-## Multiple R-squared:  0.4179, Adjusted R-squared:  0.3937 
-## F-statistic: 17.31 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = SALESBRAND2 ~ ., data = brand2)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.61481 -0.12210 -0.00258  0.13690  0.61394 
-## 
-## Coefficients:
-##                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    16.11262    1.03627  15.549  &lt; 2e-16 ***
-## PRICEBRAND1     0.01862    0.41062   0.045   0.9639    
-## PRICEBRAND2    -3.07560    0.22716 -13.539  &lt; 2e-16 ***
-## PRICEBRAND3    -0.60532    0.39347  -1.538   0.1254    
-## display_brand1  0.05154    0.23024   0.224   0.8231    
-## display_brand2  3.19263    0.46771   6.826 8.61e-11 ***
-## display_brand3 -0.42606    0.23597  -1.806   0.0724 .  
-## FEATUREBRAND1   0.96976    0.68854   1.408   0.1604    
-## FEATUREBRAND2   0.80431    2.85845   0.281   0.7787    
-## FEATUREBRAND3   1.14771    1.48146   0.775   0.4394    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.2021 on 217 degrees of freedom
-## Multiple R-squared:  0.514,  Adjusted R-squared:  0.4938 
-## F-statistic:  25.5 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = SALESBRAND3 ~ ., data = brand3)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.46495 -0.14832 -0.02194  0.14167  0.71424 
-## 
-## Coefficients:
-##                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)     15.2461     1.1133  13.695  &lt; 2e-16 ***
-## PRICEBRAND1      0.8452     0.4411   1.916   0.0567 .  
-## PRICEBRAND2      0.3554     0.2440   1.456   0.1468    
-## PRICEBRAND3     -5.0453     0.4227 -11.936  &lt; 2e-16 ***
-## display_brand1   0.2087     0.2473   0.844   0.3998    
-## display_brand2   2.0768     0.5025   4.133 5.11e-05 ***
-## display_brand3  -0.6080     0.2535  -2.398   0.0173 *  
-## FEATUREBRAND1    0.9940     0.7397   1.344   0.1804    
-## FEATUREBRAND2   -0.2074     3.0709  -0.068   0.9462    
-## FEATUREBRAND3    1.6491     1.5915   1.036   0.3013    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.2171 on 217 degrees of freedom
-## Multiple R-squared:  0.5272, Adjusted R-squared:  0.5076 
-## F-statistic: 26.89 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = CategorySales ~ ., data = categoryTotal)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.50155 -0.15783 -0.00472  0.16286  0.63673 
-## 
-## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    17.480265   0.769208  22.725  &lt; 2e-16 ***
-## PRICEBRAND1    -1.208794   0.332957  -3.630 0.000353 ***
-## PRICEBRAND2    -1.463383   0.197264  -7.418 2.64e-12 ***
-## PRICEBRAND3    -0.891840   0.318251  -2.802 0.005533 ** 
-## display_brand1  0.023648   0.016024   1.476 0.141453    
-## display_brand2  0.201440   0.047831   4.211 3.72e-05 ***
-## display_brand3 -0.009182   0.011706  -0.784 0.433663    
-## FEATUREBRAND1   0.035689   0.011690   3.053 0.002549 ** 
-## FEATUREBRAND2  -0.003112   0.016144  -0.193 0.847341    
-## FEATUREBRAND3   0.051914   0.025097   2.069 0.039774 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.2127 on 217 degrees of freedom
-## Multiple R-squared:  0.3503, Adjusted R-squared:  0.3233 
-## F-statistic:    13 on 9 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Table of coefficients…. brief explanation. Model validation of test data</p>
 </div>
 </div>
