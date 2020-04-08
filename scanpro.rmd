@@ -123,7 +123,7 @@ stl(ts(store_data$CategorySales,frequency = 52), s.window = 'periodic') %>%
 ```
 
 
-The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seasonal component to beer sales.
+The figure above shows the time series decomposition of the total beer category sales. The combined sales of the three beer brands fluctuates between \$40,000 and \$140,000 each week. The time series decomposition shows that there is no significant trend over time, however, there is a significant seasonal component to beer sales. This seasonal trend is also present in each individual brand.
 
 ```{r, echo=FALSE}
 plot_variable_by_brand <- function(data, variable, title, ylabel){
@@ -192,6 +192,8 @@ test <- store_data[-train_ind, ]
 
 ```{r}
 store_data$Month <- format(seq(as.Date('1989/09/01'),by='week',length.out = nrow(store_data)),"%B")
+
+#seasonal variable
 store_data <- fastDummies::dummy_cols(store_data)
 ```
 
@@ -203,11 +205,49 @@ bran1_df <- store_data %>%
 ------ TODO: Make the binary variables for featured --------
 
 ```{r}
-make_binary <- function(x){return(if(x>=0.01) 1 else 0)}
-
-store_data$FEATUREBRAND1 %>% lapply(make_binary)
+store_data
 ```
 
+
+```{r}
+#feature binary variables
+store_data$FEATUREBRAND1_BINARY <- ifelse(store_data$FEATUREBRAND1>0.01, 1, 0)
+store_data$FEATUREBRAND2_BINARY <- ifelse(store_data$FEATUREBRAND2>0.01, 1, 0)
+store_data$FEATUREBRAND3_BINARY <- ifelse(store_data$FEATUREBRAND3>0.01, 1, 0)
+```
+
+
+```{r}
+log_transform <- function(x){return(log(x+1))}
+
+log_cols <- 
+
+```
+
+
+```{r}
+#brand 1 model
+
+
+feature_cols <- c(
+  "SALESBRAND1",
+  
+  # PRICES
+  "PRICEBRAND1",
+  "PRICEBRAND2",
+  "PRICEBRAND3",
+  
+  # log display
+  "display_brand1"       "display_brand2"      
+[11] "display_brand3"       "FEATUREBRAND1"        "FEATUREBRAND2"        "FEATUREBRAND3"        "Month"               
+[16] "Month_April"          "Month_August"         "Month_December"       "Month_February"       "Month_January"       
+[21] "Month_July"           "Month_June"           "Month_March"          "Month_May"            "Month_November"      
+[26] "Month_October"        "Month_September"      "FEATUREBRAND1_BINARY" "FEATUREBRAND2_BINARY" "FEATUREBRAND3_BINARY"
+)
+
+
+store_data %>% select(FEATUREBRAND1, FEATUREBRAND1_BINARY)
+```
 
 
 ## Results
