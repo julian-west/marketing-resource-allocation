@@ -12,8 +12,8 @@ import statsmodels.api as sm
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.nonparametric.smoothers_lowess import  lowess
 
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import seaborn as sns
 
 from constants import *
@@ -35,6 +35,18 @@ def get_cols(regex_pat: str, columns: list):
 #########
 # Regression
 #########
+
+def save_model_results(model_results, model_name):
+    """Saves regression results as an image"""
+    
+    plt.rc('figure', figsize=(12, 7))
+    plt.text(0.01, 0.05, str(model_results.summary()), {
+             'fontsize': 10}, fontproperties='monospace')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.savefig(f'{RESULTS_FOLDER}/{model_name}.png', bbox_inches="tight")
+    plt.close()
+    
 
 def estimate_ols(target_col, feature_cols, df, model_name):
     """Estimate OLS model for a brand's unit sales
@@ -59,18 +71,6 @@ def estimate_ols(target_col, feature_cols, df, model_name):
     save_model_results(results,model_name)
 
     return model.fit()
-
-
-def save_model_results(model_results, model_name):
-    """Saves regression results as an image"""
-    
-    plt.rc('figure', figsize=(12, 7))
-    plt.text(0.01, 0.05, str(model_results.summary()), {
-             'fontsize': 10}, fontproperties='monospace')
-    plt.axis('off')
-    plt.tight_layout()
-    plt.savefig(f'{RESULTS_FOLDER}/{model_name}.png', bbox_inches="tight")
-    plt.close()
 
     
     
@@ -103,7 +103,7 @@ def plot_diagnostics(model, model_name):
     
     fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(15,10))
     
-    fig.suptitle(f"{model_name}: Regression Model Diagnostics",fontsize=24)
+    fig.suptitle(f"{model_name}: Regression Model Diagnostics",fontsize=20)
     
     # Resid vs fitted
     resid = model.resid
@@ -138,3 +138,55 @@ def plot_diagnostics(model, model_name):
     axs[1,1].set(title="Outlier Observations",xlabel="Datapoint index",ylabel="Cook's Distance")
 
     plt.subplots_adjust(hspace=0.3,wspace=0.3)
+    
+    
+    
+def plot_coef_conf_int(model):
+    """Plot coefficents and confidence intervals for main variables"""
+    
+    RED = '#f08080'
+    GREEN = '#74c365'
+    
+    #calculate error
+    err_series = model.params - model.conf_int()[0]
+    
+    #select subset of coeficients
+    features = get_cols(".*?PRICE|.*?display|.*?FEATURE",model.params.index)
+    coef_series = model.params[model.params.index.isin(features)]
+    err_series = err_series[err_series.index.isin(features)]
+    pvalues_series = model.pvalues[model.pvalues.index.isin(features)]
+    
+    #convert to dataframe
+    coef_df = pd.DataFrame({'feature':coef_series.index,
+                            'coefficient':coef_series.values,
+                           'err':err_series.values})    
+    
+    
+    #plot bar chart (green bar if p_value < 0.05 else red)
+    plt.barh(y=range(len(features)),
+             width=coef_series.values,
+             xerr=err_series.values,
+             tick_label=features,
+            color=(pvalues_series<0.05).map({True:GREEN,False:RED})
+            )
+    plt.title("Coefficient significance of price, display and featured varaibles (w/95% confidence intervals)")
+    plt.xlabel("Coefficient value")
+    
+
+    red_bars = mpl.patches.Patch(color=RED, label='Not statistically significant (5% level)')
+    green_bars = mpl.patches.Patch(color=GREEN, label='Statistically significant (5% level)')
+    plt.legend(handles=[red_bars, green_bars])
+    
+    
+def plot_preds_versus_actual(preds, actual, model_name):
+    """Plot predicted versus actual on test data"""
+
+    #diagonal line coordinates
+    diag = np.linspace(start=min(actual),stop=max(preds))
+    plt.plot(diag,diag, ls="--", c="r")
+    
+    plt.scatter(x=preds, y=actual)
+
+    plt.title(f"{model_name}: Model validation actual vs. predicted")
+    plt.ylabel("Actual")
+    plt.xlabel("Predicted")
