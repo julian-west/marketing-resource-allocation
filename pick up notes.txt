@@ -1,7 +1,4 @@
-Next steps:
-- make function for model diagnostic plots
-- ask teaching staff question on interpreting binary variables
-- complete introduction write up
-- formulate question
-- tidy up train/test
+- create latex tables of results
+- management implications discussion
+- write up into latex
 
