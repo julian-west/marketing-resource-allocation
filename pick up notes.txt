@@ -1,8 +1,0 @@
-- create latex tables of results
-- management implications discussion
-- write up into latex
-
-- quickly try different model (e..g without binary FEATURE variable)
-- add commentary to model estimation notebook cells
-- investigate endogeneity
-

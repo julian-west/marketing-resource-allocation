@@ -1,0 +1,335 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+
+\usepackage{booktabs}  
+\usepackage{graphicx} 
+\usepackage{listings}
+\usepackage{booktabs,adjustbox}
+\usepackage{amsmath}
+\usepackage[tableposition=top]{caption}
+
+
+\usepackage{pdflscape}
+\lstset{%
+backgroundcolor=\color{black},
+basicstyle=\ttfamily,
+numbers=left,numberstyle=\scriptsize
+}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=black
+}
+
+
+\usepackage{natbib}
+
+\usepackage[wby]{callouts}
+
+\graphicspath{ {./report/visualisations/} }
+
+\title{Understanding promotional activity for beer products sold by supermarket chain  \\
+\addlinespace
+\large Retail Marketing Analytics - Individual Report }
+\author{Julian West | CID 01623906}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium libero non odio tincidunt semper. Vivamus sollicitudin egestas mattis. Sed vitae risus vel ex tincidunt molestie nec vel leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas quis massa tincidunt, faucibus magna non, fringilla sapien. In ullamcorper justo a scelerisque egestas. Ut maximus, elit a rutrum viverra, lectus sapien varius est, vel tempor neque mi et augue. Fusce ornare venenatis nunc nec feugiat. Proin a enim mauris. Mauris dignissim vulputate erat, vitae cursus risus elementum at. Cras luctus pharetra congue. Aliquam id est dictum, finibus ligula sed, tempus arcu. 
+\end{abstract} \hspace{10pt}
+
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+Retailers are interested in understanding the financial impact of promotional activity on product sales. The SCAN*PRO model is a popular method for quantifying the interaction effects between various promotions and allows retail store managers to improve their promotional mix decisions. In this analysis, the SCAN*PRO model will be used to understand the effects of promotional activity on the sales of three different brands of beer for a Chicago based supermarket store, Dominick's. The insights gained from the model will be used to make recommendations to the store manager on how to effectively use their promotional activity resource to maximise beer sales.
+
+\subsection{Business Objective \& Research Question}
+The following business objectives and corresponding research questions were evaluated in the analysis:
+\newline
+\newline
+\textbf{Business Objective}: What is the most effective form of promotion to boost unit sales?
+\begin{itemize}
+        \item Which types of promotion are more effective for each beer brand, display or feature?
+        \item Are promotions equally effective for each brand of beer?
+        \item What is the price elasticity for each brand of beer?
+\end{itemize}
+\newline
+\newline
+
+This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions as well as setting the retail price of each beer brand. It is also assumed that there are no specific contractual obligations with the brand supplier guaranteeing a certain amount of promotion activity for their particular product. 
+
+The business objective aims to understand how the store manager can make best use of limited promotional resources. It is assumed that there is a finite amount of promotional resource and all products cannot be featured at the same time or all stock keeping units displayed at the same time. Therefore there is an benefit to knowing which brands perform better when on promotion so that the limited promotional resource can be allocated more effectively. It is also important to understand the price elasticity for each brand that pricing decisions can be made intelligently to increase the number of units sold. This may be important for clearing old stock at an optimum price.
+
+
+\subsection{About SCAN*PRO}
+
+SCAN*PRO is a store-level model which is able to quantify the effect of price changes and promotional activities on the unit sales of products for retailers. The model is a multiplicative model which includes own and cross brands for price, feature/display advertising, seasonality and a random error term \citep{leeflang_how_2002}:
+\begin{equation}
+\label{eqn:scanpro}
+    q_{kjt} = \Bigg[\prod_{r=1}^n\Bigg(\frac{p_{krt}}{\bar{p}_{kr}}\Bigg)^{\beta rj}\prod_{t=1}^{T}\gamma_{lrj}^{D_{lkrt}}\Bigg]\Bigg[\prod_{t=1}^{T}\delta_{jt}^{X_{t}}\Bigg]\Bigg[\prod_{k=1}^{K}\lambda_{kj}^{Z_{k}}\Bigg]e^{u_{kjt}} 
+\end{equation}
+
+For $k = 1, ...., K, t=1,....T$
+\newline
+\newline
+Where:
+\begin{itemize}
+    \item $q_{kjt}$ is unit sales for brand $j$ in store $k$ in week $t$
+    \item $p_{krt}$ is the unit price for brand $r$ in store $k$ in week $t$
+    \item $D_{1krt}$ is an indicator variable for display advertising: 1 if brand $r$ is displayed 0 if not
+    \item $D_{2krt}$ is an indicator variable for feature advertising: 1 if brand $r$ is featured 0 if not
+    \item $X_t$ is an indicator variable (for seasonal effects)
+    \item $Z_k$ is an indicator variable for store $k$
+    \item $e$ is an error term for unobserved or missing variables from the model
+\end{itemize}
+
+The parameters $\beta_{rj}$, $\gamma_{lrj}$. $\delta_{jt}$ and $\lambda_{kj}$ are to be estimated. The $\beta_{rj}$ parameters are the price elasticity's of the own brand and competing brands....
+
+These parameters can be estimated using non-linear optimisation techniques, however, this can be computationally expensive, highly sensitive to model inputs and has no guarantee of reaching a global minimum. Therefore, it is easier to take the log transformation of equation \ref{eqn:scanpro} to make the model additive which can be solved using simple linear estimation techniques such as OLS. 
+
+The additive model thus becomes:
+\begin{equation}
+\label{eqn:scanprolog}
+    ln(q_{kjt}) = \sum_{r=1}^n{\beta _{rj}ln\Bigg(\frac{p_{krt}}{\bar{p}_{kr}}\Bigg)+ \sum_{r=1}^n\sum_{l=1}^{2}{ln(\gamma_{lrj}){D_{lkrt}}}} + \sum_{t=1}^T{ln(\delta_{jt})X_t} + \sum_{k=1}^K{ln(\lambda_{kj}Z_k} + e_{kjt}
+\end{equation}
+
+The model parameters from equation \ref{eqn:scanprolog} can then be converted back into the multiplicative form in equation \ref{eqn:scanpro} to estimate unit sales for the week.
+
+
+\subsection{Software Used}
+
+All analysis for this project was conducted using \href{https://www.python.org/}{Python (programming language)}. Details of code and packages used are included in the supplementary information.
+
+
+\section{Data}
+The data set consists of scanner records for beer category products from a Dominick's Finer Foods store (Dominick's). Dominick's was a Chicago-area grocery store chain before being \href{https://en.wikipedia.org/wiki/Dominick\%27s}{acquired by Safeway} in 1998 and eventually closing in 2013. The original source of the dataset was  \href{https://www.chicagobooth.edu/research/kilts/datasets/dominicks}{Chicago Booth Kilts Center for Marketing} and a description of the dataset is included in \citep{srinivasan_promotions_2004}. However, the data set used for analysis was an adapted dataset shared by the Imperial College Retail Marketing Analytics teaching team via Slack (\emph{beer\_data\_chicago\_Dominicks.xlsx}).
+
+The data covers 227 weeks (4 years 5 months) of sales for three brands of beer between 1989 and 1993. The raw data contains the following attributes for each brand:
+
+\begin{table}[htb]
+ \centering
+ \caption{Raw data set features}\label{tab:data_features}
+ \begin{tabular}{cccc}
+ \toprule
+  Variable Name & Description \\
+  \midrule
+  \texttt{SALESBRAND*}& the average sales (\$) for brand * \\
+  \texttt{PRICEBRAND*}	& the retail price (\$) for brand * \\
+  \texttt{display\_brand*}	& the percentage of SKUs^{$\dagger$} on display for brand * \\
+  \texttt{FEATUREBRAND*}	& the percentage of SKUs featured in the store for brand * \\
+  \texttt{RETAILERMARGINBRAND*} & the average retailer margin (\%) for brand * \\
+  \texttt{WHOLESALEPRICEBRAND*} & the average wholesale price (\$) for brand * \\
+  \bottomrule
+  $\dagger$ Stock keeping units
+  
+ \end{tabular}
+\end{table}
+
+The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week. It is not clear from the literature \citep{srinivasan_promotions_2004} what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. 
+
+The retailer margin is not a factor in the model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
+
+The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subjected to the endogeneity problem as they may be set be the store manager in response to how well the the product is selling and so they are not completely independent of the target variable, unit sales. The wholesale price can be a useful alternative to retail price as an instrument variable if endogenity exists. Therefore, the wholesale price was kept in the data set for further investigation.
+
+The raw data did not contain a \textit{unit sales} variable which is the desired target variable for the SCAN*PRO model. Therefore, a unit sales variable, \textit{UNITSBRAND*}, was created for each brand by dividing the sales of the brand by its average retail price for each week.
+
+\subsection{Exploratory Analysis}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.38]{eda_plots}
+  \caption{Sales, price, display and feature data for each brand}\label{fig:eda-plots}
+\end{figure}
+
+
+
+\subsection{Assumptions}
+The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
+
+
+\section{Results}
+\newpage
+\begin{center}
+\begin{table}
+\caption{Brand 1: SCAN*PRO coefficients}
+\begin{tabular}{lclc}
+
+\toprule
+\textbf{Dep. Variable:}        & log\_UNITSBRAND1 & \textbf{  R-squared:         } &     0.777   \\
+\textbf{Model:}                &       OLS        & \textbf{  Adj. R-squared:    } &     0.756   \\
+\textbf{Method:}               &  Least Squares   & \textbf{  F-statistic:       } &     35.96   \\
+\textbf{Date:}                 & Sat, 11 Apr 2020 & \textbf{  Prob (F-statistic):} &  3.77e-56   \\
+\textbf{Time:}                 &     16:22:19     & \textbf{  Log-Likelihood:    } &    94.246   \\
+\textbf{No. Observations:}     &         227      & \textbf{  AIC:               } &    -146.5   \\
+\textbf{Df Residuals:}         &         206      & \textbf{  BIC:               } &    -74.57   \\
+\textbf{Df Model:}             &          20      & \textbf{                     } &             \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{tabular}{lcccccc}
+                               & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+\midrule
+\textbf{const}                 &      18.8007  &        1.033     &    18.206  &         0.000        &       16.765    &       20.837     \\
+\textbf{log\_PRICEBRAND1}      &      -4.8740  &        0.369     &   -13.209  &         0.000        &       -5.601    &       -4.146     \\
+\textbf{log\_PRICEBRAND2}      &       0.3262  &        0.205     &     1.589  &         0.114        &       -0.079    &        0.731     \\
+\textbf{log\_PRICEBRAND3}      &      -1.4018  &        0.362     &    -3.873  &         0.000        &       -2.115    &       -0.688     \\
+\textbf{log\_display\_brand1}  &       0.6736  &        0.199     &     3.390  &         0.001        &        0.282    &        1.065     \\
+\textbf{log\_display\_brand2}  &       0.7605  &        0.414     &     1.837  &         0.068        &       -0.056    &        1.577     \\
+\textbf{log\_display\_brand3}  &      -0.3266  &        0.215     &    -1.521  &         0.130        &       -0.750    &        0.097     \\
+\textbf{binary\_FEATUREBRAND1} &       0.0939  &        0.040     &     2.376  &         0.018        &        0.016    &        0.172     \\
+\textbf{binary\_FEATUREBRAND2} &       0.0075  &        0.042     &     0.179  &         0.858        &       -0.075    &        0.090     \\
+\textbf{binary\_FEATUREBRAND3} &       0.0148  &        0.107     &     0.138  &         0.890        &       -0.196    &        0.225     \\
+\textbf{August}                &       0.2292  &        0.057     &     4.019  &         0.000        &        0.117    &        0.342     \\
+\textbf{December}              &      -0.0772  &        0.061     &    -1.266  &         0.207        &       -0.198    &        0.043     \\
+\textbf{February}              &      -0.1557  &        0.059     &    -2.625  &         0.009        &       -0.273    &       -0.039     \\
+\textbf{January}               &      -0.0700  &        0.060     &    -1.174  &         0.242        &       -0.188    &        0.048     \\
+\textbf{July}                  &       0.2674  &        0.056     &     4.737  &         0.000        &        0.156    &        0.379     \\
+\textbf{June}                  &       0.3694  &        0.059     &     6.304  &         0.000        &        0.254    &        0.485     \\
+\textbf{March}                 &      -0.1076  &        0.060     &    -1.796  &         0.074        &       -0.226    &        0.011     \\
+\textbf{May}                   &       0.3299  &        0.058     &     5.658  &         0.000        &        0.215    &        0.445     \\
+\textbf{November}              &      -0.0992  &        0.061     &    -1.633  &         0.104        &       -0.219    &        0.021     \\
+\textbf{October}               &      -0.0726  &        0.058     &    -1.244  &         0.215        &       -0.188    &        0.042     \\
+\textbf{September}             &       0.0766  &        0.055     &     1.383  &         0.168        &       -0.033    &        0.186     \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lclc}
+\textbf{Omnibus:}       & 11.282 & \textbf{  Durbin-Watson:     } &    1.446  \\
+\textbf{Prob(Omnibus):} &  0.004 & \textbf{  Jarque-Bera (JB):  } &   11.511  \\
+\textbf{Skew:}          &  0.520 & \textbf{  Prob(JB):          } &  0.00317  \\
+\textbf{Kurtosis:}      &  3.366 & \textbf{  Cond. No.          } &     317.  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\newpage
+
+% BRAND 2 REGRESSION RESULTS
+\begin{center}
+\begin{table}
+\caption{Brand 2: SCAN*PRO coefficients}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}        & log\_UNITSBRAND2 & \textbf{  R-squared:         } &     0.805   \\
+\textbf{Model:}                &       OLS        & \textbf{  Adj. R-squared:    } &     0.786   \\
+\textbf{Method:}               &  Least Squares   & \textbf{  F-statistic:       } &     42.52   \\
+\textbf{Date:}                 & Sat, 11 Apr 2020 & \textbf{  Prob (F-statistic):} &  6.01e-62   \\
+\textbf{Time:}                 &     16:36:52     & \textbf{  Log-Likelihood:    } &    111.22   \\
+\textbf{No. Observations:}     &         227      & \textbf{  AIC:               } &    -180.4   \\
+\textbf{Df Residuals:}         &         206      & \textbf{  BIC:               } &    -108.5   \\
+\textbf{Df Model:}             &          20      & \textbf{                     } &             \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{tabular}{lcccccc}
+                               & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+\midrule
+\textbf{const}                 &      16.6887  &        0.958     &    17.416  &         0.000        &       14.799    &       18.578     \\
+\textbf{log\_PRICEBRAND1}      &      -0.5023  &        0.342     &    -1.467  &         0.144        &       -1.177    &        0.173     \\
+\textbf{log\_PRICEBRAND2}      &      -3.6822  &        0.190     &   -19.329  &         0.000        &       -4.058    &       -3.307     \\
+\textbf{log\_PRICEBRAND3}      &      -0.6435  &        0.336     &    -1.916  &         0.057        &       -1.306    &        0.019     \\
+\textbf{log\_display\_brand1}  &      -0.1127  &        0.184     &    -0.611  &         0.542        &       -0.476    &        0.251     \\
+\textbf{log\_display\_brand2}  &       2.5825  &        0.384     &     6.724  &         0.000        &        1.825    &        3.340     \\
+\textbf{log\_display\_brand3}  &      -0.3336  &        0.199     &    -1.675  &         0.095        &       -0.726    &        0.059     \\
+\textbf{binary\_FEATUREBRAND1} &       0.0152  &        0.037     &     0.414  &         0.679        &       -0.057    &        0.087     \\
+\textbf{binary\_FEATUREBRAND2} &       0.0325  &        0.039     &     0.841  &         0.401        &       -0.044    &        0.109     \\
+\textbf{binary\_FEATUREBRAND3} &       0.0320  &        0.099     &     0.323  &         0.747        &       -0.163    &        0.227     \\
+\textbf{August}                &       0.1409  &        0.053     &     2.662  &         0.008        &        0.037    &        0.245     \\
+\textbf{December}              &      -0.0739  &        0.057     &    -1.306  &         0.193        &       -0.186    &        0.038     \\
+\textbf{February}              &      -0.1645  &        0.055     &    -2.989  &         0.003        &       -0.273    &       -0.056     \\
+\textbf{January}               &      -0.1237  &        0.055     &    -2.235  &         0.027        &       -0.233    &       -0.015     \\
+\textbf{July}                  &       0.1566  &        0.052     &     2.989  &         0.003        &        0.053    &        0.260     \\
+\textbf{June}                  &       0.2464  &        0.054     &     4.531  &         0.000        &        0.139    &        0.354     \\
+\textbf{March}                 &      -0.0576  &        0.056     &    -1.035  &         0.302        &       -0.167    &        0.052     \\
+\textbf{May}                   &       0.2229  &        0.054     &     4.121  &         0.000        &        0.116    &        0.330     \\
+\textbf{November}              &      -0.0993  &        0.056     &    -1.761  &         0.080        &       -0.211    &        0.012     \\
+\textbf{October}               &      -0.1148  &        0.054     &    -2.119  &         0.035        &       -0.222    &       -0.008     \\
+\textbf{September}             &      -0.0330  &        0.051     &    -0.642  &         0.522        &       -0.134    &        0.068     \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lclc}
+\textbf{Omnibus:}       &  8.722 & \textbf{  Durbin-Watson:     } &    1.414  \\
+\textbf{Prob(Omnibus):} &  0.013 & \textbf{  Jarque-Bera (JB):  } &   16.292  \\
+\textbf{Skew:}          &  0.071 & \textbf{  Prob(JB):          } & 0.000290  \\
+\textbf{Kurtosis:}      &  4.305 & \textbf{  Cond. No.          } &     317.  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\newpage
+
+% BRAND 3 regression results
+\begin{center}
+\begin{table}
+\caption{Brand 3: SCAN*PRO coefficients}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}        & log\_UNITSBRAND3 & \textbf{  R-squared:         } &     0.802   \\
+\textbf{Model:}                &       OLS        & \textbf{  Adj. R-squared:    } &     0.783   \\
+\textbf{Method:}               &  Least Squares   & \textbf{  F-statistic:       } &     41.69   \\
+\textbf{Date:}                 & Sat, 11 Apr 2020 & \textbf{  Prob (F-statistic):} &  2.92e-61   \\
+\textbf{Time:}                 &     16:37:01     & \textbf{  Log-Likelihood:    } &    100.73   \\
+\textbf{No. Observations:}     &         227      & \textbf{  AIC:               } &    -159.5   \\
+\textbf{Df Residuals:}         &         206      & \textbf{  BIC:               } &    -87.53   \\
+\textbf{Df Model:}             &          20      & \textbf{                     } &             \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{tabular}{lcccccc}
+                               & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+\midrule
+\textbf{const}                 &      14.9740  &        1.004     &    14.920  &         0.000        &       12.995    &       16.953     \\
+\textbf{log\_PRICEBRAND1}      &       0.4840  &        0.359     &     1.350  &         0.179        &       -0.223    &        1.191     \\
+\textbf{log\_PRICEBRAND2}      &       1.0858  &        0.200     &     5.442  &         0.000        &        0.692    &        1.479     \\
+\textbf{log\_PRICEBRAND3}      &      -6.1407  &        0.352     &   -17.455  &         0.000        &       -6.834    &       -5.447     \\
+\textbf{log\_display\_brand1}  &       0.1762  &        0.193     &     0.912  &         0.363        &       -0.205    &        0.557     \\
+\textbf{log\_display\_brand2}  &       1.5551  &        0.402     &     3.866  &         0.000        &        0.762    &        2.348     \\
+\textbf{log\_display\_brand3}  &      -0.4286  &        0.209     &    -2.055  &         0.041        &       -0.840    &       -0.017     \\
+\textbf{binary\_FEATUREBRAND1} &       0.0125  &        0.038     &     0.326  &         0.745        &       -0.063    &        0.088     \\
+\textbf{binary\_FEATUREBRAND2} &      -0.0133  &        0.040     &    -0.328  &         0.743        &       -0.093    &        0.067     \\
+\textbf{binary\_FEATUREBRAND3} &       0.1231  &        0.104     &     1.186  &         0.237        &       -0.082    &        0.328     \\
+\textbf{August}                &       0.2225  &        0.055     &     4.016  &         0.000        &        0.113    &        0.332     \\
+\textbf{December}              &      -0.0903  &        0.059     &    -1.522  &         0.129        &       -0.207    &        0.027     \\
+\textbf{February}              &      -0.1031  &        0.058     &    -1.789  &         0.075        &       -0.217    &        0.011     \\
+\textbf{January}               &      -0.0728  &        0.058     &    -1.256  &         0.210        &       -0.187    &        0.041     \\
+\textbf{July}                  &       0.2690  &        0.055     &     4.903  &         0.000        &        0.161    &        0.377     \\
+\textbf{June}                  &       0.2794  &        0.057     &     4.906  &         0.000        &        0.167    &        0.392     \\
+\textbf{March}                 &      -0.1100  &        0.058     &    -1.888  &         0.060        &       -0.225    &        0.005     \\
+\textbf{May}                   &       0.2266  &        0.057     &     3.998  &         0.000        &        0.115    &        0.338     \\
+\textbf{November}              &      -0.0538  &        0.059     &    -0.911  &         0.364        &       -0.170    &        0.063     \\
+\textbf{October}               &      -0.0464  &        0.057     &    -0.818  &         0.415        &       -0.158    &        0.065     \\
+\textbf{September}             &       0.1006  &        0.054     &     1.869  &         0.063        &       -0.006    &        0.207     \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lclc}
+\textbf{Omnibus:}       &  3.704 & \textbf{  Durbin-Watson:     } &    1.106  \\
+\textbf{Prob(Omnibus):} &  0.157 & \textbf{  Jarque-Bera (JB):  } &    3.343  \\
+\textbf{Skew:}          &  0.244 & \textbf{  Prob(JB):          } &    0.188  \\
+\textbf{Kurtosis:}      &  3.339 & \textbf{  Cond. No.          } &     317.  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\newpage
+
+\section{Discussion}
+
+\section{Management Recommendations}
+
+\section{Conclusions}
+
+\bibliographystyle{agsm}
+\bibliography{references}
+
+
+
+
+\end{document}
