@@ -179,7 +179,7 @@ def plot_coef_conf_int(model):
         tick_label=features,
         color=(pvalues_series < 0.05).map({True: GREEN, False: RED}),
     )
-    plt.title("Coefficient significance of price, display and featured variable (w/95% confidence intervals)")
+    plt.title("Coefficient significance of price, display and featured variables (w/95% confidence intervals)")
     plt.xlabel("Coefficient value")
 
     red_bars = mpl.patches.Patch(
