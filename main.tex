@@ -48,7 +48,7 @@ numbers=left,numberstyle=\scriptsize
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium libero non odio tincidunt semper. Vivamus sollicitudin egestas mattis. Sed vitae risus vel ex tincidunt molestie nec vel leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas quis massa tincidunt, faucibus magna non, fringilla sapien. In ullamcorper justo a scelerisque egestas. Ut maximus, elit a rutrum viverra, lectus sapien varius est, vel tempor neque mi et augue. Fusce ornare venenatis nunc nec feugiat. Proin a enim mauris. Mauris dignissim vulputate erat, vitae cursus risus elementum at. Cras luctus pharetra congue. Aliquam id est dictum, finibus ligula sed, tempus arcu. 
 \end{abstract} \hspace{10pt}
 
-
+\newpage
 \tableofcontents
 \newpage
 
@@ -196,10 +196,26 @@ The log unit sales (\textit{log\_UNITSBRAND*}) for each brand were estimated usi
 
 To validate the models, 80\% of the data was randomly sampled for model estimation (training) with 20\% reserved for validating the accuracy of the model on unseen data. Once the model had been validated, the model was re-estimated using the full data set to obtain the final model coefficients which could be used for interpretation.
 
+Table \ref{tab:val-results} shows the $R^2$ of the SCAN*PRO model for each brand trained on 80\% of the available data. All three models gave reasonably good $R^2$ values with the models explaining approximately 80\% of the variation in the data. The root mean squared error (RMSE) of the models on the unseen test data was approximately 0.17 for each model (equivalent to an average prediction error of $\pm 2\%$). The $R^2$ and RMSE for each model are consistent which suggests that the model is generalisable with good performance for all three brands.
+
+
+\begin{table}
+\centering
+\caption{$R^2$ for models trained on 80\% of data and RMSE of model on unseen test data}\label{tab:val-results}
+\begin{tabular}{lrr}
+\toprule
+{} &        r2 &      rmse \\
+\midrule
+Brand 1 &  0.792233 &  0.165940 \\
+Brand 2 &  0.812804 &  0.172020 \\
+Brand 3 &  0.813989 &  0.177375 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \subsection{Results}
-The regression results for brand 1, brand 2 and brand 3 are reported in table \ref{tab:brand1}, \ref{tab:brand2} and \ref{tab:brand3} respectively.
+The regression results for brand 1, brand 2 and brand 3 estimated using all available data observations are reported in table \ref{tab:brand1}, \ref{tab:brand2} and \ref{tab:brand3} respectively.
 
 \newpage
 \begin{center}
@@ -363,9 +379,71 @@ The regression results for brand 1, brand 2 and brand 3 are reported in table \r
 
 \section{Discussion}
 
-\section{Management Recommendations}
+The $R^2$ values for each model range from 0.77 to 0.80, indicating that the models explain approximately 80\% of the variation in log unit sales for each brand. For all three brands there are clear seasonal effects on The coefficients for each seasonal dummy variable. Sales of each brand are increased in the summer months with the dummy variables for May, June, July and August all having large and significant coefficients in all models.
+
+The coefficients of the \textit{binary\_FEATUREBRAND*}, \textit{log\_display\_brand*} and \textit{log\_PRICEBRAND*} and their confidence intervals for each brand are shown in graphical form in figures \ref{fig:brand1-significance}, \ref{fig:brand2-significance}, \ref{fig:brand3-significance}.
+
+\subsection{Price}
+
+The price of the brand has the largest impact on unit sales. The own brand price elasticities of brand 1,2 and 3 are -4.874, -3.682, -6.141 respectively. Due to the log-log form of the model, these coefficients can be interpreted as meaning that a decrease in price by 1\% will increase the unit sales by 4.874\%, 3.682\% and 6.141\% for each brand respectively. This suggests that customers of brand 3 are most sensitive to changes in price. The error bar ranges for the own brand price elasticities are small compared to the magnitude of the coefficient which gives confidence of the sign and magnitude of these coefficients.
+
+The cross-brand price elasticities are much lower than the own-brand price elasticities. Interestingly, reducing the price of brand 3 by 1\% actually increases unit sales of brand 1 by 1.4\%. Conversely, reducing the price of brand 2 by 1\% reduces unit sales of brand 3 by 1.1\%. 
+
+
+\subsection{Display}
+
+The own brand display coefficients are 0.674, 2.583, -0.429 for each brand respectively. This implies that if the percentage of SKUs on display for each brand is increased by 1\% (note this is not the same as an increase by 1 \textit{percentage point}), then the unit sales for the week are increased by 0.674\% and 2.583\% for brands 1 and 2 whereas the unit sales are decreased by 0.429\% for brand 3. Display promotions are therefore most effective for brand 2 with a significant uplift in sales for additional products on display. Display promotions are less effective for brand 1 and actually detrimental for brand 3. Brand 3 is the least popular of the three brands in terms of unit sales and customers may therefore not respond as well to the promotion.
+
+\subsection{Feature}
+
+The feature variables in the model are binary and their values are interpreted differently to price and display. The target variable was transformed using a $log(x+1)$ transformation, therefore the effect on unit sales of the \textit{binary\_FEATUREBRAND*} variables is equal to $e^{coefficient}$ [REFERENCE]. The own brand feature coefficients for brand 1, 2 and 3 are 0.094, 0.033, 0.123 respectively. However, only brand 1's coefficient is statistically significant. Therefore, if brand 1 is featured during the week then unit sales are increased by approximately 9.9\% ($e^0.094 = 1.099)$. The lower 95\% confidence interval for this coefficient is greater than 0, therefore it can be concluded that featuring brand 1 has a positive effect on sales.
+
+The own brand coefficients for brand 2 and 3 are not statistically significant but are both positive. This suggests that featuring these brands in the week has a positive impact on sales as well, however, we can not be as confident in the magnitude of the effect.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.47]{brand1_modelfinal_significance}
+  \caption{Brand 1 key model coefficients with confidence intervals }\label{fig:brand1-significance}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.47]{brand2_modelfinal_significance}
+  \caption{Brand 2 key model coefficients with confidence intervals }\label{fig:brand2-significance}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.47]{brand3_modelfinal_significance}
+  \caption{Brand 3 key model coefficients with confidence intervals }\label{fig:brand3-significance}
+\end{figure}
 
 \section{Conclusions}
+
+\subsection{Management Recommendations}
+The following conclusions and recommendations can be made to the store manager of Dominick's:
+\begin{itemize}
+    \item Customers of brand 3 are most price sensitive
+    \begin{itemize}
+        \item Increasing prices of brand 3 by 1\% can reduce unit sales by 6.74\%
+    \end{itemize}
+    \item Display promotions are most effective for brand 2
+    \begin{itemize}
+        \item Increasing the percentage of brand 2 SKUs on display by 1\% increases unit sales by 2.58\%
+        \item Display advertising has only a minimal effect on unit sales for brands 1 and 3
+    \end{itemize}
+    \item Feature promotions are most effective for brand 1
+    \begin{itemize}
+        \item If brand 1 is on display in a given week, unit sales increase by 9.9\%
+    \end{itemize}
+\end{itemize}
+
+\subsection{Model Improvements}
+The ...........
+
+
+\subsection{Future Work}
+The SCAN*PRO model only addresses the short-term impact of price changes and promotional activity on demand for the product. However, it would be useful for the store manager be able to understand the long-term impact of promotional activity on future unit sales. The delayed and forward purchase effects of promotions on customer purchasing behaviour can be quantified using VAR and IRFS models [REFERENCE] .  
 
 \bibliographystyle{agsm}
 \bibliography{references}

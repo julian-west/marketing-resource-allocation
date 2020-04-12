@@ -181,6 +181,7 @@ def plot_coef_conf_int(model):
     )
     plt.title("Coefficient significance of price, display and featured variables (w/95% confidence intervals)")
     plt.xlabel("Coefficient value")
+    plt.xlim([-7,4])
 
     red_bars = mpl.patches.Patch(
         color=RED, label="Not statistically significant (5% level)"
@@ -189,6 +190,7 @@ def plot_coef_conf_int(model):
         color=GREEN, label="Statistically significant (5% level)"
     )
     plt.legend(handles=[red_bars, green_bars])
+    plt.tight_layout()
 
 
 def plot_preds_versus_actual(preds, actual, model_name):
