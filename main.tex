@@ -137,15 +137,22 @@ The data covers 227 weeks (4 years 5 months) of sales for three brands of beer b
  \end{tabular}
 \end{table}
 
-The display and feature attributes are the percentage of stock keeping units (SKUs) of each brand which were promoted each week. It is not clear from the literature \citep{srinivasan_promotions_2004} what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. 
+The display and feature attributes are expressed as the percentage of stock keeping units (SKUs) of each brand which were promoted in that week. It is not clear from the literature \citep{srinivasan_promotions_2004} what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. 
 
-The retailer margin is not a factor in the model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
+The retailer margin is not a factor in the SCAN*PRO model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
 
 The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subjected to the endogeneity problem as they may be set be the store manager in response to how well the the product is selling and so they are not completely independent of the target variable, unit sales. The wholesale price can be a useful alternative to retail price as an instrument variable if endogenity exists. Therefore, the wholesale price was kept in the data set for further investigation.
 
 The raw data did not contain a \textit{unit sales} variable which is the desired target variable for the SCAN*PRO model. Therefore, a unit sales variable, \textit{UNITSBRAND*}, was created for each brand by dividing the sales of the brand by its average retail price for each week.
 
+
+\subsection{Assumptions}
+The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. It is assumed that the display and feature promotions lasted for the entire week.
+
+The start date for the data observations was not explicit in the literature \citep{srinivasan_promotions_2004}, however, therefore it was assumed that the data observations started in the first week of June 1989 (4th June 1989). This assumption is consistent with the seasonality observed in figure \ref{fig:seasonal-plots}.
+
 \subsection{Exploratory Analysis}
+
 
 \begin{figure}
   \centering
@@ -153,17 +160,51 @@ The raw data did not contain a \textit{unit sales} variable which is the desired
   \caption{Sales, price, display and feature data for each brand}\label{fig:eda-plots}
 \end{figure}
 
+The unit sales, prices, display and feature variables for each brand are shown in figure \ref{fig:eda-plots}. 
+
+Brands 1 and 2 are the most popular with similar weekly unit sales but they also exhibit a high variation in unit sales from week to week. Whereas brand 3 has a much more consistent but lower sales volume. The retail sales price of each brand is similar and hovers between approximately \$4 and \$5 throughout the time period. 
+
+Each brand appears to have a certain percentage of stock keeping units 'on display' in almost every week. There is very high variation in the percentage of SKUs from week to week with brand 1 having the highest average percentage of SKUs on display (14\%).
+
+The 'feature' promotional activity appears to happen less frequently and used more sparingly than the 'display' promotions. Most weeks typically have no brands or just one brand featured'. Brand 1 had the most featured weeks and tended to have a greater percentage of SKUs featured in the week compared to when other brands were featured. Brand 2 was featured more consistently than the other brands, however, albeit with a smaller percentage of SKUs. Brand 3 was only featured towards the end of the time period of observations. 
+
+The SCAN*PRO model is also sensitive to seasonal effects in the unit sales. Figure \ref{fig:seasonal-plots} shows the seasonal components of the unit sales timeseries for each brand of beer. There are clear and significant seasonal trends in the data, with unit sales peaking in the summer months (May-August) as well as smaller peaks across the Christmas holiday period.
 
 
-\subsection{Assumptions}
-The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. Therefore, it is assumed that each promotion lasts for one week.
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.38]{seasonal_plots}
+  \caption{Seasonal component of unit sales for each brand unit sales}\label{fig:seasonal-plots}
+\end{figure}
 
 
-\section{Results}
+\section{Model Estimation}
+\subsection{Methodology}
+As there are three competing brands of beer, a separate model was created to estimate the unit sales of each brand. This yielded coefficients for own and cross-brand elasticises for price, display and feature promotions.
+
+\subsubsection{Data Preparation}
+In order for the model to be estimated using linear methodologies (equation \ref{eqn:scanprolog}), the \textit{UNITSBRAND*}, \textit{PRICEBRAND*} and \textit{display\_brand*} variables were log transformed. Due to the presence of a small number of zero values in the \textit{display\_brand*} variables, a $log(x+1)$ transformation was used to avoid -inf values after the transformation.
+
+The \textit{FEATUREBRAND*} variable could not be log transformed in this manner as the majority of values were zero for each brand. Therefore the \textit{FEATUREBRAND*} variable was encoded as a new binary variable, \textit{binary\_FEATUREBRAND*}, which was 1 if the percentage of SKUs was greater than 0.02 and 0 otherwise. Even though the percentage of SKUs featured was not the same for each brand, the binary variable still preserved important information about the effects of feature promotions on unit sales.
+
+Finally, eleven dummy variables ($k-1$) were created for each month of the year to encode the seasonality observed in figure \ref{fig:seasonal-plots}.
+
+
+\subsubsection{Model Estimation \& Validation}
+
+The log unit sales (\textit{log\_UNITSBRAND*}) for each brand were estimated using a regression model with the \textit{log\_PRICEBRAND*}, \textit{log\_display\_brand*}, \textit{binary\_FEATUREBRAND*} and seasonal dummy variables as inputs (see \textit{01\_regression\_modelling.ipynb} in the supplementary information). \footnote{Alternative combinations of model inputs were also investigated, however, these were deemed to be less accurate and were not selected for further investigation (see \textit{02\_alternative\_models.ipynb} in the supplementary information for analysis)}
+
+To validate the models, 80\% of the data was randomly sampled for model estimation (training) with 20\% reserved for validating the accuracy of the model on unseen data. Once the model had been validated, the model was re-estimated using the full data set to obtain the final model coefficients which could be used for interpretation.
+
+
+
+\subsection{Results}
+The regression results for brand 1, brand 2 and brand 3 are reported in table \ref{tab:brand1}, \ref{tab:brand2} and \ref{tab:brand3} respectively.
+
 \newpage
 \begin{center}
 \begin{table}
-\caption{Brand 1: SCAN*PRO coefficients}
+\caption{Brand 1: SCAN*PRO coefficients}\label{tab:brand1}
 \begin{tabular}{lclc}
 
 \toprule
@@ -217,7 +258,7 @@ The data is given at a weekly level and will therefore trace the impact of price
 % BRAND 2 REGRESSION RESULTS
 \begin{center}
 \begin{table}
-\caption{Brand 2: SCAN*PRO coefficients}
+\caption{Brand 2: SCAN*PRO coefficients}\label{tab:brand2}
 \begin{tabular}{lclc}
 \toprule
 \textbf{Dep. Variable:}        & log\_UNITSBRAND2 & \textbf{  R-squared:         } &     0.805   \\
@@ -270,7 +311,7 @@ The data is given at a weekly level and will therefore trace the impact of price
 % BRAND 3 regression results
 \begin{center}
 \begin{table}
-\caption{Brand 3: SCAN*PRO coefficients}
+\caption{Brand 3: SCAN*PRO coefficients}\label{tab:brand3}
 \begin{tabular}{lclc}
 \toprule
 \textbf{Dep. Variable:}        & log\_UNITSBRAND3 & \textbf{  R-squared:         } &     0.802   \\
