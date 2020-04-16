@@ -34,75 +34,81 @@ numbers=left,numberstyle=\scriptsize
 
 \graphicspath{ {./report/visualisations/} }
 
-\title{Understanding promotional activity for beer products sold by supermarket chain  \\
+\title{SCAN*PRO: Understanding the effectiveness of price, display and promotional activity for competing brands of beer  \\
 \addlinespace
-\large Retail Marketing Analytics - Individual Report }
+\large Retail Marketing Analytics - Individual Report}
 \author{Julian West | CID 01623906}
 
 
 \begin{document}
 
 \maketitle
-
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium libero non odio tincidunt semper. Vivamus sollicitudin egestas mattis. Sed vitae risus vel ex tincidunt molestie nec vel leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas quis massa tincidunt, faucibus magna non, fringilla sapien. In ullamcorper justo a scelerisque egestas. Ut maximus, elit a rutrum viverra, lectus sapien varius est, vel tempor neque mi et augue. Fusce ornare venenatis nunc nec feugiat. Proin a enim mauris. Mauris dignissim vulputate erat, vitae cursus risus elementum at. Cras luctus pharetra congue. Aliquam id est dictum, finibus ligula sed, tempus arcu. 
-\end{abstract} \hspace{10pt}
+In this analysis, the SCAN*PRO model is applied to understand the effect of promotional activity on the unit sales of three competing brands of beer sold by a supermarket store. This information can be used by the store manager to more effectively utilise promotions to increase unit sales for each brand of beer. Three separate SCAN*PRO models were created, one for each brand, to estimate the own and cross brand elasticities for price, display and feature promotional activity whilst also incorporating the effect of seasonality on sales. Beer sales for all three brands were highly seasonal with unit sales increased up to 45\% in the summer months. Feature promotions were found to be more effective than display promotions, however, ....
+
+\end{abstract} \hspace{50pt}
 
 \newpage
 \tableofcontents
 \newpage
 
 \section{Introduction}
-Retailers are interested in understanding the financial impact of promotional activity on product sales. The SCAN*PRO model is a popular method for quantifying the interaction effects between various promotions and allows retail store managers to improve their promotional mix decisions. In this analysis, the SCAN*PRO model will be used to understand the effects of promotional activity on the sales of three different brands of beer for a Chicago based supermarket store, Dominick's. The insights gained from the model will be used to make recommendations to the store manager on how to effectively use their promotional activity resource to maximise beer sales.
+Retailers are interested in understanding the impact that promotional activity has on product sales. This information can aid short term demand forecasting and help optimise the allocation of limited promotion resources. The SCAN*PRO model \citep{wittink_estimation_1988} is a popular method for quantifying the interaction effects between various promotional activities such as price reductions, display promotions and feature promotions, allowing store mangers to understand the effectiveness of promotional campaigns for different products \citep{andrews_estimating_2008, srinivasan_promotions_2004}. 
+
+In this analysis, the SCAN*PRO model was be used to understand the effects of promotional activity on the sales of three competing brands of beer for a Chicago based supermarket store, Dominick's. The insights gained from the model were used to make recommendations to the store manager on how to tailor promotional activity for each brand of beer to effectively use their promotional activity resources.
 
 \subsection{Business Objective \& Research Question}
-The following business objectives and corresponding research questions were evaluated in the analysis:
+The following business objective and corresponding research questions were evaluated in the analysis:
 \newline
 \newline
-\textbf{Business Objective}: What is the most effective form of promotion to boost unit sales?
+\textbf{Business Objective}: What is the most effective form of promotion to boost unit sales of each beer brand?
 \begin{itemize}
-        \item Which types of promotion are more effective for each beer brand, display or feature?
+        \item Which types of promotion are more effective for each beer brand: price reduction, display or feature promotion?
         \item Are promotions equally effective for each brand of beer?
-        \item What is the price elasticity for each brand of beer?
+        \item How does promotional activity of each brand interact with sales of other beer brands?
 \end{itemize}
 \newline
 \newline
 
-This analysis will look at promotional activity from the perspective of the store manager. It is assumed that the manager has full control over feature and display promotions as well as setting the retail price of each beer brand. It is also assumed that there are no specific contractual obligations with the brand supplier guaranteeing a certain amount of promotion activity for their particular product. 
+This analysis will look at promotional activity from the perspective of the store manager making decisions on retail pricing and on how many stock units should be promoted in a given week. The research questions answered in the analysis aim to inform how the store manager can make best use of limited promotional resources to sell more units of beer. 
 
-The business objective aims to understand how the store manager can make best use of limited promotional resources. It is assumed that there is a finite amount of promotional resource and all products cannot be featured at the same time or all stock keeping units displayed at the same time. Therefore there is an benefit to knowing which brands perform better when on promotion so that the limited promotional resource can be allocated more effectively. It is also important to understand the price elasticity for each brand that pricing decisions can be made intelligently to increase the number of units sold. This may be important for clearing old stock at an optimum price.
+\subsection{Assumptions}
+
+The main assumptions of the analysis are as follows:
+\begin{itemize}
+    \item There is a finite amount of promotional resource, therefore there is a benefit to optimising the promotional activity for brands which have the best response to certain types of promotion.
+    \item The manager has full control over setting the level of feature, display and price promotional activity. For example, there are no contractual obligations with brand suppliers which guarantees a certain level of promotion.
+\end{itemize}
 
 
 \subsection{About SCAN*PRO}
 
-SCAN*PRO is a store-level model which is able to quantify the effect of price changes and promotional activities on the unit sales of products for retailers. The model is a multiplicative model which includes own and cross brands for price, feature/display advertising, seasonality and a random error term \citep{leeflang_how_2002}:
+SCAN*PRO is a store-level model which is able to quantify the effect of price changes and promotional activities on the unit sales of products for retailers. The model is a multiplicative model which includes own and cross brands elasticities for price, feature and display advertising. Seasonality and a random error term are also included in the model. The SCAN*PRO model is shown in equation \ref{eqn:scanpro}  \citep{leeflang_how_2002}:
 \begin{equation}
 \label{eqn:scanpro}
     q_{kjt} = \Bigg[\prod_{r=1}^n\Bigg(\frac{p_{krt}}{\bar{p}_{kr}}\Bigg)^{\beta rj}\prod_{t=1}^{T}\gamma_{lrj}^{D_{lkrt}}\Bigg]\Bigg[\prod_{t=1}^{T}\delta_{jt}^{X_{t}}\Bigg]\Bigg[\prod_{k=1}^{K}\lambda_{kj}^{Z_{k}}\Bigg]e^{u_{kjt}} 
 \end{equation}
 
-For $k = 1, ...., K, t=1,....T$
+For $k = 1, ...., K; t=1,....T$
 \newline
 \newline
 Where:
 \begin{itemize}
-    \item $q_{kjt}$ is unit sales for brand $j$ in store $k$ in week $t$
-    \item $p_{krt}$ is the unit price for brand $r$ in store $k$ in week $t$
-    \item $D_{1krt}$ is an indicator variable for display advertising: 1 if brand $r$ is displayed 0 if not
-    \item $D_{2krt}$ is an indicator variable for feature advertising: 1 if brand $r$ is featured 0 if not
-    \item $X_t$ is an indicator variable (for seasonal effects)
-    \item $Z_k$ is an indicator variable for store $k$
-    \item $e$ is an error term for unobserved or missing variables from the model
+    \item $q_{kjt}$: unit sales for brand $j$ in store $k$ in week $t$
+    \item $p_{krt}$: unit price for brand $r$ in store $k$ in week $t$
+    \item $D_{1krt}$: indicator variable for display advertising: 1 if brand $r$ is displayed 0 if not
+    \item $D_{2krt}$: indicator variable for feature advertising: 1 if brand $r$ is featured 0 if not
+    \item $X_t$: indicator variable (for seasonal effects)
+    \item $Z_k$: indicator variable for store $k$
+    \item $e$: error term for unobserved or missing variables from the model
 \end{itemize}
 
-The parameters $\beta_{rj}$, $\gamma_{lrj}$. $\delta_{jt}$ and $\lambda_{kj}$ are to be estimated. The $\beta_{rj}$ parameters are the price elasticity's of the own brand and competing brands....
+The parameters $\beta_{rj}$, $\gamma_{lrj}$, $\delta_{jt}$ and $\lambda_{kj}$ are to be estimated. These parameters can be estimated using non-linear optimisation techniques, however, this can be computationally expensive, highly sensitive to model inputs and has no guarantee of reaching a global minimum. Therefore, it is advantageous to take the log transformation of equation \ref{eqn:scanpro} to make the model additive which can be solved using simple linear estimation techniques such as OLS. 
 
-These parameters can be estimated using non-linear optimisation techniques, however, this can be computationally expensive, highly sensitive to model inputs and has no guarantee of reaching a global minimum. Therefore, it is easier to take the log transformation of equation \ref{eqn:scanpro} to make the model additive which can be solved using simple linear estimation techniques such as OLS. 
-
-The additive model thus becomes:
+The additive model to be estimated thus becomes:
 \begin{equation}
 \label{eqn:scanprolog}
-    ln(q_{kjt}) = \sum_{r=1}^n{\beta _{rj}ln\Bigg(\frac{p_{krt}}{\bar{p}_{kr}}\Bigg)+ \sum_{r=1}^n\sum_{l=1}^{2}{ln(\gamma_{lrj}){D_{lkrt}}}} + \sum_{t=1}^T{ln(\delta_{jt})X_t} + \sum_{k=1}^K{ln(\lambda_{kj}Z_k} + e_{kjt}
+    ln(q_{kjt}) = \sum_{r=1}^n{\beta _{rj}ln\Bigg(\frac{p_{krt}}{\bar{p}_{kr}}\Bigg)+ \sum_{r=1}^n\sum_{l=1}^{2}{ln(\gamma_{lrj}){D_{lkrt}}}} + \sum_{t=1}^T{ln(\delta_{jt})X_t} + \sum_{k=1}^K{ln(\lambda_{kj})Z_k} + e_{kjt}
 \end{equation}
 
 The model parameters from equation \ref{eqn:scanprolog} can then be converted back into the multiplicative form in equation \ref{eqn:scanpro} to estimate unit sales for the week.
@@ -110,46 +116,47 @@ The model parameters from equation \ref{eqn:scanprolog} can then be converted ba
 
 \subsection{Software Used}
 
-All analysis for this project was conducted using \href{https://www.python.org/}{Python (programming language)}. Details of code and packages used are included in the supplementary information.
+All analysis was conducted using \href{https://www.python.org/}{Python (programming language)}. Details of code and packages used are included in the supplementary information.
 
 
 \section{Data}
-The data set consists of scanner records for beer category products from a Dominick's Finer Foods store (Dominick's). Dominick's was a Chicago-area grocery store chain before being \href{https://en.wikipedia.org/wiki/Dominick\%27s}{acquired by Safeway} in 1998 and eventually closing in 2013. The original source of the dataset was  \href{https://www.chicagobooth.edu/research/kilts/datasets/dominicks}{Chicago Booth Kilts Center for Marketing} and a description of the dataset is included in \citep{srinivasan_promotions_2004}. However, the data set used for analysis was an adapted dataset shared by the Imperial College Retail Marketing Analytics teaching team via Slack (\emph{beer\_data\_chicago\_Dominicks.xlsx}).
+\subsection{Description}
+The dataset used for the analysis consists of scanner records for beer category products from a grocery store, Dominick's Finer Foods store (Dominick's). The original source of the dataset was  \href{https://www.chicagobooth.edu/research/kilts/datasets/dominicks}{Chicago Booth Kilts Center for Marketing} and a description of the raw dataset is included in \citet{srinivasan_promotions_2004}. However, the dataset used for this analysis was an adapted dataset shared by the Imperial College Retail Marketing Analytics teaching team via Slack (March 19th - \emph{beer\_data\_chicago\_Dominicks.xlsx}).
 
 The data covers 227 weeks (4 years 5 months) of sales for three brands of beer between 1989 and 1993. The raw data contains the following attributes for each brand:
 
 \begin{table}[htb]
  \centering
- \caption{Raw data set features}\label{tab:data_features}
+ \caption{Raw dataset features}\label{tab:data_features}
  \begin{tabular}{cccc}
  \toprule
   Variable Name & Description \\
   \midrule
   \texttt{SALESBRAND*}& the average sales (\$) for brand * \\
   \texttt{PRICEBRAND*}	& the retail price (\$) for brand * \\
-  \texttt{display\_brand*}	& the percentage of SKUs^{$\dagger$} on display for brand * \\
+  \texttt{display\_brand*}	& the percentage of SKUs{$\dagger$} on display for brand * \\
   \texttt{FEATUREBRAND*}	& the percentage of SKUs featured in the store for brand * \\
   \texttt{RETAILERMARGINBRAND*} & the average retailer margin (\%) for brand * \\
   \texttt{WHOLESALEPRICEBRAND*} & the average wholesale price (\$) for brand * \\
   \bottomrule
-  $\dagger$ Stock keeping units
-  
+  \multicolumn{2}{c}{$*$ Brand 1,2 or 3, $\dagger$ Stock keeping units}
  \end{tabular}
 \end{table}
 
-The display and feature attributes are expressed as the percentage of stock keeping units (SKUs) of each brand which were promoted in that week. It is not clear from the literature \citep{srinivasan_promotions_2004} what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. 
-
-The retailer margin is not a factor in the SCAN*PRO model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
-
-The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subjected to the endogeneity problem as they may be set be the store manager in response to how well the the product is selling and so they are not completely independent of the target variable, unit sales. The wholesale price can be a useful alternative to retail price as an instrument variable if endogenity exists. Therefore, the wholesale price was kept in the data set for further investigation.
+The display and feature attributes are expressed as the percentage of stock keeping units (SKUs) which were promoted by the store in a given week. It is not clear from the literature \citep{srinivasan_promotions_2004} what 'display' and 'feature' promotions specifically involved at the store so it is assumed that for a display promotion the product was displayed prominently in the store and for a feature promotion the product was 'on offer'. 
 
 The raw data did not contain a \textit{unit sales} variable which is the desired target variable for the SCAN*PRO model. Therefore, a unit sales variable, \textit{UNITSBRAND*}, was created for each brand by dividing the sales of the brand by its average retail price for each week.
 
+The retailer margin is not a factor in the SCAN*PRO model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
+
+The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subject issues with endogeneity as they may be set by the store manager in response to how well the the product is selling, and therefore may not completely independent of the target variable, unit sales. The wholesale price can be a useful alternative to retail price as an instrument variable if endogenity exists and was kept in the dataset for further investigation.
+
+
 
 \subsection{Assumptions}
-The data is given at a weekly level and will therefore trace the impact of price/display promotions over a weekly time period. It is assumed that the display and feature promotions lasted for the entire week.
+The data observations are given with weekly interval and it is assumed that the display and feature promotions lasted for the entire week of the observation.
 
-The start date for the data observations was not explicit in the literature \citep{srinivasan_promotions_2004}, however, therefore it was assumed that the data observations started in the first week of June 1989 (4th June 1989). This assumption is consistent with the seasonality observed in figure \ref{fig:seasonal-plots}.
+The start date for the data observations was not explicit in the literature \citep{srinivasan_promotions_2004}. It was assumed that the data observations started in the first week of June 1989 (4th June 1989) which is consistent with the seasonality exhibited in figure \ref{fig:seasonal-plots}.
 
 \subsection{Exploratory Analysis}
 
@@ -157,18 +164,20 @@ The start date for the data observations was not explicit in the literature \cit
 \begin{figure}
   \centering
   \includegraphics[scale=0.38]{eda_plots}
-  \caption{Sales, price, display and feature data for each brand}\label{fig:eda-plots}
+  \caption{Unit sales, price, display and feature data for each brand}\label{fig:eda-plots}
 \end{figure}
 
 The unit sales, prices, display and feature variables for each brand are shown in figure \ref{fig:eda-plots}. 
 
-Brands 1 and 2 are the most popular with similar weekly unit sales but they also exhibit a high variation in unit sales from week to week. Whereas brand 3 has a much more consistent but lower sales volume. The retail sales price of each brand is similar and hovers between approximately \$4 and \$5 throughout the time period. 
+Brands 1 and 2 are the most popular with similar weekly unit sales but they also exhibit a greatest variation in unit sales from week to week. Whereas brand 3 has a much more consistent but lower sales volume. It appears most of the variation in unit sales is driven by seasonal factors.
 
-Each brand appears to have a certain percentage of stock keeping units 'on display' in almost every week. There is very high variation in the percentage of SKUs from week to week with brand 1 having the highest average percentage of SKUs on display (14\%).
+The retail price of each brand is similar and hovers between approximately \$4 and \$5 throughout the time period. 
 
-The 'feature' promotional activity appears to happen less frequently and used more sparingly than the 'display' promotions. Most weeks typically have no brands or just one brand featured'. Brand 1 had the most featured weeks and tended to have a greater percentage of SKUs featured in the week compared to when other brands were featured. Brand 2 was featured more consistently than the other brands, however, albeit with a smaller percentage of SKUs. Brand 3 was only featured towards the end of the time period of observations. 
+Each brand appears to have a certain percentage of stock keeping units 'on display' in almost every week. There is a very high variation in the percentage of SKUs from week to week ranging from 0\% to 50\%, with brand 1 having the highest average percentage of SKUs on display each week (14\%).
 
-The SCAN*PRO model is also sensitive to seasonal effects in the unit sales. Figure \ref{fig:seasonal-plots} shows the seasonal components of the unit sales timeseries for each brand of beer. There are clear and significant seasonal trends in the data, with unit sales peaking in the summer months (May-August) as well as smaller peaks across the Christmas holiday period.
+The 'feature' promotional activity appears to happen less frequently and used more sparingly than the 'display' promotions. Most weeks typically have no brands or just one brand featured. Brand 1 was featured the most and tended to have a greater percentage of SKUs featured in the week compared to when other brands were featured. Brand 2 was featured more consistently than the other brands albeit with a smaller percentage of SKUs. Brand 3 was only featured towards the end of the time period of observations. 
+
+The SCAN*PRO model is also sensitive to seasonal effects in the unit sales. Figure \ref{fig:seasonal-plots} shows the seasonal component of the unit sales for each brand of beer. There are clear and significant seasonal trends in the data for all brands, with unit sales peaking in the summer months (May-August) as well as smaller peaks across the Christmas holiday period.
 
 
 \begin{figure}
@@ -180,23 +189,21 @@ The SCAN*PRO model is also sensitive to seasonal effects in the unit sales. Figu
 
 \section{Model Estimation}
 \subsection{Methodology}
-As there are three competing brands of beer, a separate model was created to estimate the unit sales of each brand. This yielded coefficients for own and cross-brand elasticises for price, display and feature promotions.
 
 \subsubsection{Data Preparation}
-In order for the model to be estimated using linear methodologies (equation \ref{eqn:scanprolog}), the \textit{UNITSBRAND*}, \textit{PRICEBRAND*} and \textit{display\_brand*} variables were log transformed. Due to the presence of a small number of zero values in the \textit{display\_brand*} variables, a $log(x+1)$ transformation was used to avoid -inf values after the transformation.
+In order for the model to be estimated using linear methodologies (equation \ref{eqn:scanprolog}), the \textit{UNITSBRAND*}, \textit{PRICEBRAND*} and \textit{display\_brand*} variables were log transformed. Due to the presence of a small number of zero values in the \textit{display\_brand*} variables, a $log(x+1)$ transformation \citep{wooldridge_multiple_2016} was used to avoid \textit{-inf} values after the transformation.
 
-The \textit{FEATUREBRAND*} variable could not be log transformed in this manner as the majority of values were zero for each brand. Therefore the \textit{FEATUREBRAND*} variable was encoded as a new binary variable, \textit{binary\_FEATUREBRAND*}, which was 1 if the percentage of SKUs was greater than 0.02 and 0 otherwise. Even though the percentage of SKUs featured was not the same for each brand, the binary variable still preserved important information about the effects of feature promotions on unit sales.
+The \textit{FEATUREBRAND*} variable could not be log transformed in this manner as the majority of values were zero for each brand (figure \ref{fig:eda-plots}) which would make interpretation of the coefficients less meaningful. Therefore the \textit{FEATUREBRAND*} variable was encoded as a new binary variable, \textit{binary\_FEATUREBRAND*}, which was labelled as 1 if the percentage of SKUs was greater than 0.02 and 0 otherwise. Even though the percentage of SKUs featured was not the same for each brand, the binary variable still preserved important information about the effects of feature promotions on unit sales.
 
 Finally, eleven dummy variables ($k-1$) were created for each month of the year to encode the seasonality observed in figure \ref{fig:seasonal-plots}.
 
 
 \subsubsection{Model Estimation \& Validation}
+A separate model was created for each of the three competing brands of beer. The log unit sales (\textit{log\_UNITSBRAND*}) for each brand were estimated using a regression model with the \textit{log\_PRICEBRAND*}, \textit{log\_display\_brand*}, \textit{binary\_FEATUREBRAND*} and seasonal dummy variables as inputs (see \textit{notebooks/01\_regression\_modelling.ipynb} in the supplementary information). \footnote{Alternative combinations of model inputs were also investigated, however, these were deemed to be less accurate and were not selected for further investigation (see \textit{02\_alternative\_models.ipynb} in the supplementary information for analysis)}
 
-The log unit sales (\textit{log\_UNITSBRAND*}) for each brand were estimated using a regression model with the \textit{log\_PRICEBRAND*}, \textit{log\_display\_brand*}, \textit{binary\_FEATUREBRAND*} and seasonal dummy variables as inputs (see \textit{01\_regression\_modelling.ipynb} in the supplementary information). \footnote{Alternative combinations of model inputs were also investigated, however, these were deemed to be less accurate and were not selected for further investigation (see \textit{02\_alternative\_models.ipynb} in the supplementary information for analysis)}
+To validate the models, 80\% of the data was randomly sampled for model estimation (training) with 20\% reserved for validating the accuracy of the model on unseen data. Once the model had been validated and the linear regression assumptions checked, the model was re-estimated using the full dataset to obtain the final model coefficients which could be used for interpretation.
 
-To validate the models, 80\% of the data was randomly sampled for model estimation (training) with 20\% reserved for validating the accuracy of the model on unseen data. Once the model had been validated, the model was re-estimated using the full data set to obtain the final model coefficients which could be used for interpretation.
-
-Table \ref{tab:val-results} shows the $R^2$ of the SCAN*PRO model for each brand trained on 80\% of the available data. All three models gave reasonably good $R^2$ values with the models explaining approximately 80\% of the variation in the data. The root mean squared error (RMSE) of the models on the unseen test data was approximately 0.17 for each model (equivalent to an average prediction error of $\pm 2\%$). The $R^2$ and RMSE for each model are consistent which suggests that the model is generalisable with good performance for all three brands.
+Table \ref{tab:val-results} shows the $R^2$ of the SCAN*PRO model for each brand model trained on 80\% of the available data. All three models gave reasonably good $R^2$ values with the models explaining approximately 80\% of the variation in the data. The root mean squared error (RMSE) of the models on the unseen test data was approximately 0.17 for each model (equivalent to an average prediction error of $\pm 2\%$). The $R^2$ and RMSE for each model are consistent which suggests that the model is generalisable with good performance for all three brands.
 
 
 \begin{table}
@@ -204,7 +211,7 @@ Table \ref{tab:val-results} shows the $R^2$ of the SCAN*PRO model for each brand
 \caption{$R^2$ for models trained on 80\% of data and RMSE of model on unseen test data}\label{tab:val-results}
 \begin{tabular}{lrr}
 \toprule
-{} &        r2 &      rmse \\
+Model &        $R^2$ &      RMSE \\
 \midrule
 Brand 1 &  0.792233 &  0.165940 \\
 Brand 2 &  0.812804 &  0.172020 \\
@@ -215,7 +222,7 @@ Brand 3 &  0.813989 &  0.177375 \\
 
 
 \subsection{Results}
-The regression results for brand 1, brand 2 and brand 3 estimated using all available data observations are reported in table \ref{tab:brand1}, \ref{tab:brand2} and \ref{tab:brand3} respectively.
+The final model coefficients for brand 1, 2 and 3 estimated using all available observations are reported in tables \ref{tab:brand1}, \ref{tab:brand2} and \ref{tab:brand3} respectively.
 
 \newpage
 \begin{center}
@@ -379,26 +386,12 @@ The regression results for brand 1, brand 2 and brand 3 estimated using all avai
 
 \section{Discussion}
 
-The $R^2$ values for each model range from 0.77 to 0.80, indicating that the models explain approximately 80\% of the variation in log unit sales for each brand. For all three brands there are clear seasonal effects on The coefficients for each seasonal dummy variable. Sales of each brand are increased in the summer months with the dummy variables for May, June, July and August all having large and significant coefficients in all models.
+The $R^2$ values for each model range from 0.77 to 0.80, indicating that the models are a good fit for the data and explain approximately 80\% of the variation in log unit sales for each brand. 
 
-The coefficients of the \textit{binary\_FEATUREBRAND*}, \textit{log\_display\_brand*} and \textit{log\_PRICEBRAND*} and their confidence intervals for each brand are shown in graphical form in figures \ref{fig:brand1-significance}, \ref{fig:brand2-significance}, \ref{fig:brand3-significance}.
+Seasonality is a significant factor affecting unit sales for all brands. For example, sales in the summer months (May - August) can be increased by up to 45\% (brand 1, June [$e^{0.3694}=1.447$]). The magnitude of seasonal effects is similar for all brands and is the main contributing factor to log unit sales.
 
-\subsection{Price}
+While seasonality is an important factor for estimating unit sales, it is out of the control of the store manager. The coefficients for price, display and feature variables provide valuable insights for the store manager assessing the effectiveness of promotional activity. The coefficients of the \textit{binary\_FEATUREBRAND*}, \textit{log\_display\_brand*} and \\ \textit{log\_PRICEBRAND*} variables and their confidence intervals for each brand are shown in graphical form in figures \ref{fig:brand1-significance}, \ref{fig:brand2-significance} and \ref{fig:brand3-significance}.
 
-The price of the brand has the largest impact on unit sales. The own brand price elasticities of brand 1,2 and 3 are -4.874, -3.682, -6.141 respectively. Due to the log-log form of the model, these coefficients can be interpreted as meaning that a decrease in price by 1\% will increase the unit sales by 4.874\%, 3.682\% and 6.141\% for each brand respectively. This suggests that customers of brand 3 are most sensitive to changes in price. The error bar ranges for the own brand price elasticities are small compared to the magnitude of the coefficient which gives confidence of the sign and magnitude of these coefficients.
-
-The cross-brand price elasticities are much lower than the own-brand price elasticities. Interestingly, reducing the price of brand 3 by 1\% actually increases unit sales of brand 1 by 1.4\%. Conversely, reducing the price of brand 2 by 1\% reduces unit sales of brand 3 by 1.1\%. 
-
-
-\subsection{Display}
-
-The own brand display coefficients are 0.674, 2.583, -0.429 for each brand respectively. This implies that if the percentage of SKUs on display for each brand is increased by 1\% (note this is not the same as an increase by 1 \textit{percentage point}), then the unit sales for the week are increased by 0.674\% and 2.583\% for brands 1 and 2 whereas the unit sales are decreased by 0.429\% for brand 3. Display promotions are therefore most effective for brand 2 with a significant uplift in sales for additional products on display. Display promotions are less effective for brand 1 and actually detrimental for brand 3. Brand 3 is the least popular of the three brands in terms of unit sales and customers may therefore not respond as well to the promotion.
-
-\subsection{Feature}
-
-The feature variables in the model are binary and their values are interpreted differently to price and display. The target variable was transformed using a $log(x+1)$ transformation, therefore the effect on unit sales of the \textit{binary\_FEATUREBRAND*} variables is equal to $e^{coefficient}$ [REFERENCE]. The own brand feature coefficients for brand 1, 2 and 3 are 0.094, 0.033, 0.123 respectively. However, only brand 1's coefficient is statistically significant. Therefore, if brand 1 is featured during the week then unit sales are increased by approximately 9.9\% ($e^0.094 = 1.099)$. The lower 95\% confidence interval for this coefficient is greater than 0, therefore it can be concluded that featuring brand 1 has a positive effect on sales.
-
-The own brand coefficients for brand 2 and 3 are not statistically significant but are both positive. This suggests that featuring these brands in the week has a positive impact on sales as well, however, we can not be as confident in the magnitude of the effect.
 
 \begin{figure}
   \centering
@@ -418,32 +411,60 @@ The own brand coefficients for brand 2 and 3 are not statistically significant b
   \caption{Brand 3 key model coefficients with confidence intervals }\label{fig:brand3-significance}
 \end{figure}
 
+\subsection{Price}
+
+The own brand price elasticities of brand 1, 2 and 3 are -4.874, -3.682, -6.141 respectively. Due to the log-log form of the model, these coefficients can be interpreted as meaning that a decrease in price by 1\% will increase the unit sales by 4.874\%, 3.682\% and 6.141\% for each brand respectively. This suggests that customers of brand 3 are most sensitive to changes in price. The confidence intervals for the own brand price elasticities are small compared to the magnitude of the coefficient which gives confidence of the sign and relative magnitude of these coefficients.
+
+The cross-brand price elasticities are much lower than the own-brand price elasticities. Indicating consumers are less sensitive to competitor pricing and use any price discounts to stock up on their preferred brand of beer (forward purchase effect).
+
+
+\subsection{Display}
+
+The own brand display coefficients are 0.674, 2.583, -0.429 for each brand respectively. This implies that if the percentage of SKUs on display for each brand is increased by 1\% (note this is not the same as an increase by 1 \textit{percentage point}), then the unit sales for the week are increased by 0.674\% and 2.583\% for brands 1 and 2 whereas the unit sales are decreased by 0.429\% for brand 3. Display promotions are therefore most effective for brand 2 with a significant uplift in sales when a greater percentage of SKUs are on display. Display promotions are less effective for brand 1 and actually detrimental for brand 3. Brand 3 is the least popular of the three brands in terms of unit sales and customers which may be a reason why customers may not respond as well to the promotion.
+
+\subsection{Feature}
+
+The feature variables in the model are binary and therefore their coefficients are interpreted differently to the price and display variables. The effect on unit sales of the \textit{binary\_FEATUREBRAND*} variables is equal to $e^{coefficient}$. The own brand feature coefficients for brand 1, 2 and 3 are 0.094, 0.033, 0.123 respectively. However, only brand 1's coefficient is statistically significant. Therefore, if brand 1 is featured during the week then unit sales are increased by approximately 9.9\% ($e^0.094 = 1.099)$. The lower 95\% confidence interval for this coefficient is greater than 0, therefore it can be concluded that featuring brand 1 has a positive effect on sales.
+
+The own brand coefficients for brand 2 and 3 are not statistically significant but are both positive. This suggests that featuring these brands in the week has a positive impact on sales as well, however, we can not be as confident in the magnitude of the effect. The low confidence in these coefficients may be a result of the fact that in the available data a lower percentage of SKUs were featured for brands 2 and 3 compared to brand 1 (figure \ref{fig:eda-plots}). This information was lost when converting to a binary variable therefore the effect of feature promotions is harder to discern.
+
+
 \section{Conclusions}
 
+The SCAN*PRO model can be used to estimate unit sales with good accuracy and consistency across different brands of beer (table \ref{tab:val-results}). Seasonality is the largest contributing factor to unit sales, however, price, display and feature promotional activity is also statistically significant. 
+
+Decreasing the price of the beer brand can increase unit sales by between 3.7-6.1\%. Display and feature promotions are not equally effective for all brands. Display advertising works best for brand 2 with an uplift in unit sales of 2.5\% for every percentage point increase in SKUs on display, whereas there is only a minimal effect for brands 1 and 3. Feature advertising has a greater impact on unit sales than display promotions with an uplift of 9.9\% observed for brand 1, however, only brand 1 had a statistically significant coefficient.
+
+
 \subsection{Management Recommendations}
-The following conclusions and recommendations can be made to the store manager of Dominick's:
+The following recommendations can be made to the store manager of Dominick's:
 \begin{itemize}
-    \item Customers of brand 3 are most price sensitive
+    \item Use 'feature' advertising to promote brand 1 preferentially.
     \begin{itemize}
-        \item Increasing prices of brand 3 by 1\% can reduce unit sales by 6.74\%
+        \item Feature promotions are most effective for brand 1 with a potential uplift of sales by 9.9\% in weeks where brand 1 is featured. Brand 2 and 3 feature promotions are not effective.
     \end{itemize}
-    \item Display promotions are most effective for brand 2
+    \item Combine display promotions with regular price reductions for brand 2.
     \begin{itemize}
-        \item Increasing the percentage of brand 2 SKUs on display by 1\% increases unit sales by 2.58\%
-        \item Display advertising has only a minimal effect on unit sales for brands 1 and 3
+        \item Display advertising is most beneficial for brand 2 with an increase in unit sales of 2.5\% for every percentage point increase in SKUs on display. This should be combined with regular price reductions which could increase sales by a further 3.7\% for every 1\% reduction in price.
     \end{itemize}
-    \item Feature promotions are most effective for brand 1
+    \item Only utilise regular price discounts to promote brand 3
     \begin{itemize}
-        \item If brand 1 is on display in a given week, unit sales increase by 9.9\%
+        \item Brand 3 customers are most price sensitive. Decreasing prices of brand 3 by 1\% can increase unit sales by 6.74\%. Brand 3 is a less popular brand of beer and does not respond well to display or feature advertising. Therefore, regular price discounting will have the greatest effect for increasing unit sales. 
     \end{itemize}
+    
+
 \end{itemize}
 
 \subsection{Model Improvements}
-The ...........
-
+While the accuracy and fit of the SCAN*PRO models to the data were reasonably high ($R^2 \approx 0.8$), the model accuracy and $R^2$ could be further improved. During regression modelling it was observed that there were a number of data points in the sample with high leverage which could have materially affected the model coefficients. These points could be removed from fitting the model to improve the confidence in the model coefficients. Secondly, additional features could be added to the model which are correlated to beer sales such as promotional activity of competing alternative products, for example wine or spirits, which may also affect a customer's propensity to buy beer.
 
 \subsection{Future Work}
-The SCAN*PRO model only addresses the short-term impact of price changes and promotional activity on demand for the product. However, it would be useful for the store manager be able to understand the long-term impact of promotional activity on future unit sales. The delayed and forward purchase effects of promotions on customer purchasing behaviour can be quantified using VAR and IRFS models [REFERENCE] .  
+This analysis focuses on increasing the unit sales of each beer brand. The profit margin for the store was not considered. Further work could aim to use the information about promotions from this analysis to find the optimum promotional allocation to maximise store profits (i.e. balance trade off between reducing retail price to increase unit sales and maintaining a profit margin).
+
+The SCAN*PRO model only addresses the short-term impact of price changes and promotional activity on demand for the product. It would also be useful for the store manager be able to understand the long-term impact of promotional activity on future unit sales due to the forward and delayed purchase effects that promotions have on customer purchasing behaviour. This can be quantified using VAR and IRFS models [REFERENCE] .  
+
+
+\textbf{Word Count: 2,619}
 
 \bibliographystyle{agsm}
 \bibliography{references}

@@ -14,6 +14,8 @@ from statsmodels.nonparametric.smoothers_lowess import lowess
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
+
 import seaborn as sns
 
 from constants import *
@@ -84,7 +86,8 @@ def estimate_ols(target_col, feature_cols, df, model_name):
 #########
 # Plots
 ##########
-def plot_cols(data, cols, ax, title, ylabel, xlabel=None):
+
+def plot_cols(data, cols, ax, title, ylabel, xlabel=None, y_decimal=0):
     """Plot specified columns"""
 
     data[cols].plot(color=BRAND_COLORS, ax=ax)
@@ -92,7 +95,7 @@ def plot_cols(data, cols, ax, title, ylabel, xlabel=None):
     ax.set_ylabel(ylabel)
     ax.set_title(title)
 
-    ax.yaxis.set_major_formatter(mpl.ticker.StrMethodFormatter("{x:,.0f}"))
+    ax.yaxis.set_major_formatter(FormatStrFormatter(f'%.{y_decimal}f'))
 
     return ax
 
