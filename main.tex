@@ -149,7 +149,7 @@ The raw data did not contain a \textit{unit sales} variable which is the desired
 
 The retailer margin is not a factor in the SCAN*PRO model described in equation \ref{eqn:scanpro} and was therefore not considered in the model estimation.
 
-The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subject to issues with endogeneity as they may be set by the store manager in response to how well the the product is selling, and therefore may not completely independent of the target variable. The wholesale price can be a useful alternative to retail price as an instrument variable if endogeneity exists and was kept in the dataset for further investigation.
+The wholesale price is not directly used in the SCAN*PRO model as the retail price is used instead. However, retail prices can be subject to issues with endogeneity as they may be set by the store manager in response to how well the the product is selling, and therefore may not completely independent of the target variable. The wholesale price can be a useful alternative to retail price as an instrument variable if endogeneity exists and was kept in the dataset for further investigation \footnote{Granger causality tests showed that the \textit{PRICEBRAND*} variable was not endogenous - see \textit{notebooks/02\_alternative\_models.ipynb} in the supplementary information}.
 
 
 
@@ -186,6 +186,7 @@ The SCAN*PRO model also incorporates seasonal effects on the unit sales. Figure 
   \caption{Seasonal component of unit sales for each brand unit sales}\label{fig:seasonal-plots}
 \end{figure}
 
+\newpage
 
 \section{Model Estimation}
 \subsection{Methodology}
@@ -438,7 +439,7 @@ The following recommendations can be made to Dominick's store manager:
 \begin{itemize}
     \item Use 'feature' advertising to promote brand 1 preferentially.
     \begin{itemize}
-        \item Feature promotions are most effective for brand 1 with a potential 9.9\% sales uplift of in the weeks brand 1 is featured. Brand 2 and 3 feature promotions are not as effective.
+        \item Feature promotions are most effective for brand 1 with a potential 9.9\% sales uplift in the weeks brand 1 is featured. Brand 2 and 3 feature promotions are not as effective.
     \end{itemize}
     \item Combine display promotions with regular price reductions for brand 2.
     \begin{itemize}
@@ -453,7 +454,7 @@ The following recommendations can be made to Dominick's store manager:
 \end{itemize}
 
 \subsection{Model Improvements}
-Beer sales are likely to be affected by holidays and bank holidays. Holiday dummy variables could be added to the model to indicate whether a bank holiday occurred during the week which would help estimate unit sales for weeks with a sharp increase in demand.
+Beer sales are likely to be affected by holidays and bank holidays. Holiday dummy variables could be added to the model to indicate whether a bank holiday occurred during the week which would help estimate unit sales for weeks with a sharp increase in demand caused by holidays.
 
 During regression modelling it was observed that there were a number of data points in the sample with high leverage which could have materially affected the model coefficients. These points could be removed from fitting the model to improve the confidence in the model coefficients. 
 

@@ -13687,13 +13687,199 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="SCAN*PRO-Regression">SCAN*PRO Regression<a class="anchor-link" href="#SCAN*PRO-Regression">&#182;</a></h2>
+<h1 id="Test-for-Endogeneity">Test for Endogeneity<a class="anchor-link" href="#Test-for-Endogeneity">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="k">import</span> <span class="n">grangercausalitytests</span>
+<span class="n">grangercausalitytests</span><span class="p">(</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;log_PRICEBRAND1&#39;</span><span class="p">,</span><span class="s1">&#39;log_UNITSBRAND1&#39;</span><span class="p">]],</span> <span class="n">maxlag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Granger Causality
+number of lags (no zero) 1
+ssr based F test:         F=8.6433  , p=0.0036  , df_denom=223, df_num=1
+ssr based chi2 test:   chi2=8.7596  , p=0.0031  , df=1
+likelihood ratio test: chi2=8.5941  , p=0.0034  , df=1
+parameter F test:         F=8.6433  , p=0.0036  , df_denom=223, df_num=1
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{1: ({&#39;ssr_ftest&#39;: (8.643287057107157, 0.0036283069790825446, 223.0, 1),
+   &#39;ssr_chi2test&#39;: (8.759564461462858, 0.0030798258975285884, 1),
+   &#39;lrtest&#39;: (8.59407062349942, 0.0033725928554293083, 1),
+   &#39;params_ftest&#39;: (8.64328705710577, 0.0036283069790851745, 223.0, 1.0)},
+  [&lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c72489b978&gt;,
+   &lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c72489b748&gt;,
+   array([[0., 1., 0.]])])}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grangercausalitytests</span><span class="p">(</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;log_PRICEBRAND2&#39;</span><span class="p">,</span><span class="s1">&#39;log_UNITSBRAND2&#39;</span><span class="p">]],</span> <span class="n">maxlag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Granger Causality
+number of lags (no zero) 1
+ssr based F test:         F=0.3912  , p=0.5323  , df_denom=223, df_num=1
+ssr based chi2 test:   chi2=0.3964  , p=0.5289  , df=1
+likelihood ratio test: chi2=0.3961  , p=0.5291  , df=1
+parameter F test:         F=0.3912  , p=0.5323  , df_denom=223, df_num=1
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{1: ({&#39;ssr_ftest&#39;: (0.39115741421582045, 0.5323311509119912, 223.0, 1),
+   &#39;ssr_chi2test&#39;: (0.3964196215819526, 0.5289441303939997, 1),
+   &#39;lrtest&#39;: (0.39607235390144524, 0.5291246599375137, 1),
+   &#39;params_ftest&#39;: (0.39115741421552835, 0.5323311509121342, 223.0, 1.0)},
+  [&lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c7268b94e0&gt;,
+   &lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c724866a58&gt;,
+   array([[0., 1., 0.]])])}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grangercausalitytests</span><span class="p">(</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;log_PRICEBRAND3&#39;</span><span class="p">,</span><span class="s1">&#39;log_UNITSBRAND3&#39;</span><span class="p">]],</span> <span class="n">maxlag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Granger Causality
+number of lags (no zero) 1
+ssr based F test:         F=0.2891  , p=0.5913  , df_denom=223, df_num=1
+ssr based chi2 test:   chi2=0.2930  , p=0.5883  , df=1
+likelihood ratio test: chi2=0.2928  , p=0.5884  , df=1
+parameter F test:         F=0.2891  , p=0.5913  , df_denom=223, df_num=1
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[10]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{1: ({&#39;ssr_ftest&#39;: (0.2890919874587747, 0.5913391469071867, 223.0, 1),
+   &#39;ssr_chi2test&#39;: (0.2929811173349017, 0.5883164631506094, 1),
+   &#39;lrtest&#39;: (0.2927913743667432, 0.5884372798129702, 1),
+   &#39;params_ftest&#39;: (0.28909198745895104, 0.5913391469070595, 223.0, 1.0)},
+  [&lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c7268b98d0&gt;,
+   &lt;statsmodels.regression.linear_model.RegressionResultsWrapper at 0x2c7268b9240&gt;,
+   array([[0., 1., 0.]])])}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The null hypothesis for the Granger causality tests is that the units variable does NOT cause the price variable.</p>
+<p>The results of the granger causality tests show that for brand 2 and 3, we cannot reject the null hypothesis due to the very high p-values, and can conclude that the price variable is not endogeneous. However, the p-values for brand 1 are low, suggesting that there the price is affected by the unit sales of brand 1 and that the log_PRICEBRAND1 variable is endogeneous.</p>
+<p>For simplicity the PRICE variable will still be used in all three models, however, it may explain when the model for brand 1 has a lower $R^2$ than the other two models.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="SCAN*PRO-Regression">SCAN*PRO Regression<a class="anchor-link" href="#SCAN*PRO-Regression">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#create a list of months</span>
@@ -13723,7 +13909,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">alt1_model_features</span> <span class="o">=</span> <span class="p">(</span>
@@ -13748,7 +13934,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand1_alt1_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND1&#39;</span><span class="p">,</span>
@@ -13797,8 +13983,8 @@ div#notebook {
 Dep. Variable:        log_UNITSBRAND1   R-squared:                       0.803
 Model:                            OLS   Adj. R-squared:                  0.776
 Method:                 Least Squares   F-statistic:                     30.33
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           1.45e-42
-Time:                        15:36:57   Log-Likelihood:                 74.076
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           1.45e-42
+Time:                        19:23:15   Log-Likelihood:                 74.076
 No. Observations:                 170   AIC:                            -106.2
 Df Residuals:                     149   BIC:                            -40.30
 Df Model:                          20                                         
@@ -13912,7 +14098,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand2_alt1_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND2&#39;</span><span class="p">,</span>
@@ -13961,8 +14147,8 @@ Warnings:
 Dep. Variable:        log_UNITSBRAND2   R-squared:                       0.816
 Model:                            OLS   Adj. R-squared:                  0.791
 Method:                 Least Squares   F-statistic:                     32.99
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           1.05e-44
-Time:                        15:36:59   Log-Likelihood:                 92.237
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           1.05e-44
+Time:                        19:23:18   Log-Likelihood:                 92.237
 No. Observations:                 170   AIC:                            -142.5
 Df Residuals:                     149   BIC:                            -76.62
 Df Model:                          20                                         
@@ -14076,7 +14262,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand3_alt1_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND3&#39;</span><span class="p">,</span>
@@ -14125,8 +14311,8 @@ Warnings:
 Dep. Variable:        log_UNITSBRAND3   R-squared:                       0.815
 Model:                            OLS   Adj. R-squared:                  0.790
 Method:                 Least Squares   F-statistic:                     32.73
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           1.70e-44
-Time:                        15:37:02   Log-Likelihood:                 81.571
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           1.70e-44
+Time:                        19:23:20   Log-Likelihood:                 81.571
 No. Observations:                 170   AIC:                            -121.1
 Df Residuals:                     149   BIC:                            -55.29
 Df Model:                          20                                         
@@ -14258,7 +14444,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">alt2_model_features</span> <span class="o">=</span> <span class="p">(</span>
@@ -14283,7 +14469,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand1_alt2_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND1&#39;</span><span class="p">,</span>
@@ -14332,8 +14518,8 @@ Warnings:
 Dep. Variable:        log_UNITSBRAND1   R-squared:                       0.701
 Model:                            OLS   Adj. R-squared:                  0.661
 Method:                 Least Squares   F-statistic:                     17.51
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           1.16e-29
-Time:                        15:37:05   Log-Likelihood:                 38.818
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           1.16e-29
+Time:                        19:23:23   Log-Likelihood:                 38.818
 No. Observations:                 170   AIC:                            -35.64
 Df Residuals:                     149   BIC:                             30.22
 Df Model:                          20                                         
@@ -14447,7 +14633,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand2_alt2_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND2&#39;</span><span class="p">,</span>
@@ -14496,8 +14682,8 @@ Warnings:
 Dep. Variable:        log_UNITSBRAND2   R-squared:                       0.601
 Model:                            OLS   Adj. R-squared:                  0.548
 Method:                 Least Squares   F-statistic:                     11.23
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           6.93e-21
-Time:                        15:37:08   Log-Likelihood:                 26.594
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           6.93e-21
+Time:                        19:23:25   Log-Likelihood:                 26.594
 No. Observations:                 170   AIC:                            -11.19
 Df Residuals:                     149   BIC:                             54.66
 Df Model:                          20                                         
@@ -14611,7 +14797,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">brand3_alt2_model_train</span> <span class="o">=</span> <span class="n">estimate_ols</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;log_UNITSBRAND3&#39;</span><span class="p">,</span>
@@ -14660,8 +14846,8 @@ Warnings:
 Dep. Variable:        log_UNITSBRAND3   R-squared:                       0.726
 Model:                            OLS   Adj. R-squared:                  0.689
 Method:                 Least Squares   F-statistic:                     19.73
-Date:                Fri, 17 Apr 2020   Prob (F-statistic):           2.74e-32
-Time:                        15:37:11   Log-Likelihood:                 48.338
+Date:                Mon, 20 Apr 2020   Prob (F-statistic):           2.74e-32
+Time:                        19:23:28   Log-Likelihood:                 48.338
 No. Observations:                 170   AIC:                            -54.68
 Df Residuals:                     149   BIC:                             11.18
 Df Model:                          20                                         
@@ -14783,7 +14969,7 @@ Warnings:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_corr</span><span class="p">(</span><span class="n">brand</span><span class="p">):</span>
