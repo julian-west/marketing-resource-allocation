@@ -4,7 +4,7 @@
 
 ## Project Directory Structure
 
-The main report is contained in `julian-west_01623906_individual-assignment.pdf`. Notebooks with the code used to clean the data, create features for modelling and investigate the regression models are located in the `notebooks` folder.
+The main report is contained in `julian-west_01623906_individual-assignment.pdf`. Notebooks with the code used to clean the data, create features for modelling and investigate the regression models are located in the `notebooks` folder
 
 ```
 ├───data
