@@ -1,6 +1,12 @@
-# Retail Marketing Analytics - Individual Project
+# Retail Marketing Analytics
 
-**Julian West | CID: 01623906**
+**Julian West**
+
+**20th April 2020**
+
+## Summary
+
+Investigating the use of the SCAN\*PRO regression modelling technique to evaluate the effectiveness of promotional activity for three competing brands of beer for a Chicago based grocery store.
 
 ## Project Directory Structure
 
